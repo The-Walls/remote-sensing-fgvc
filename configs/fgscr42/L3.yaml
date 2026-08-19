@@ -1,0 +1,9 @@
+_base_: L2.yaml
+
+# Only model.head differs from L2. Domain difficulty #3: second-order feature
+# encoding (compact bilinear pooling, Gao et al. CVPR16) instead of the global
+# average pooling that lets background clutter dilute small part features.
+exp_name: L3_compact_bilinear
+
+model:
+  head: compact_bilinear

@@ -1,0 +1,9 @@
+_base_: L2.yaml
+
+# Only model.head differs from L2. Domain difficulty #3: CBAM (Woo et al.
+# ECCV18) re-weights channels and spatial positions before pooling, i.e. weakly
+# supervised localisation of the discriminative region.
+exp_name: L4_cbam
+
+model:
+  head: cbam

@@ -1,0 +1,66 @@
+=== L5_cb_ce seed=0 ===
+config: configs\fgscr42\L5.yaml
+classes=42 train=5898 val=1880 groups=5233 train_imbalance=583.0x
+model=resnet50 head=gap params=23.59M img_size=448
+ep   0 | loss 3.6963 | val 3.6282 | top1 25.69 | mpc 14.17 | f1 10.16 | 24.5s
+ep   1 | loss 3.4737 | val 3.2154 | top1 40.00 | mpc 26.27 | f1 22.67 | 14.9s
+ep   2 | loss 2.7215 | val 2.2180 | top1 63.09 | mpc 55.34 | f1 49.94 | 17.4s
+ep   3 | loss 1.7712 | val 1.4869 | top1 76.22 | mpc 74.41 | f1 66.91 | 14.8s
+ep   4 | loss 1.2738 | val 1.1773 | top1 89.26 | mpc 84.78 | f1 80.85 | 15.3s
+ep   5 | loss 1.0232 | val 1.0963 | top1 93.30 | mpc 88.46 | f1 84.87 | 15.6s
+ep   6 | loss 0.8972 | val 0.9672 | top1 96.28 | mpc 90.81 | f1 88.53 | 15.7s
+ep   7 | loss 0.8289 | val 0.8969 | top1 97.98 | mpc 93.12 | f1 92.84 | 15.6s
+ep   8 | loss 0.7965 | val 0.8943 | top1 97.93 | mpc 92.91 | f1 91.44 | 15.6s
+ep   9 | loss 0.7717 | val 0.8866 | top1 98.72 | mpc 93.60 | f1 92.56 | 15.6s
+ep  10 | loss 0.7582 | val 0.8437 | top1 98.67 | mpc 92.38 | f1 91.78 | 15.7s
+ep  11 | loss 0.7481 | val 0.8534 | top1 99.10 | mpc 93.71 | f1 92.97 | 15.8s
+ep  12 | loss 0.7377 | val 0.8356 | top1 98.99 | mpc 94.81 | f1 94.09 | 15.8s
+ep  13 | loss 0.7374 | val 0.8257 | top1 99.10 | mpc 93.71 | f1 92.70 | 15.8s
+ep  14 | loss 0.7322 | val 0.8414 | top1 98.88 | mpc 95.96 | f1 95.78 | 15.8s
+ep  15 | loss 0.7305 | val 0.8283 | top1 99.10 | mpc 93.67 | f1 92.24 | 16.7s
+ep  16 | loss 0.7259 | val 0.8337 | top1 99.04 | mpc 94.86 | f1 94.96 | 17.4s
+ep  17 | loss 0.7216 | val 0.8103 | top1 99.41 | mpc 94.98 | f1 95.13 | 17.6s
+ep  18 | loss 0.7147 | val 0.8339 | top1 99.47 | mpc 92.51 | f1 91.53 | 17.8s
+ep  19 | loss 0.7175 | val 0.8128 | top1 99.41 | mpc 96.16 | f1 95.57 | 23.5s
+ep  20 | loss 0.7193 | val 0.8095 | top1 99.57 | mpc 95.03 | f1 94.27 | 24.2s
+ep  21 | loss 0.7118 | val 0.8135 | top1 99.47 | mpc 93.82 | f1 92.96 | 17.6s
+ep  22 | loss 0.7124 | val 0.8117 | top1 99.36 | mpc 96.15 | f1 95.94 | 24.7s
+ep  23 | loss 0.7123 | val 0.8180 | top1 99.26 | mpc 97.28 | f1 96.90 | 29.1s
+ep  24 | loss 0.7113 | val 0.7963 | top1 99.63 | mpc 97.41 | f1 96.93 | 26.0s
+ep  25 | loss 0.7127 | val 0.8236 | top1 99.57 | mpc 96.21 | f1 95.70 | 27.6s
+ep  26 | loss 0.7126 | val 0.8046 | top1 99.73 | mpc 97.44 | f1 97.29 | 27.6s
+ep  27 | loss 0.7075 | val 0.7958 | top1 99.36 | mpc 96.16 | f1 96.03 | 29.4s
+ep  28 | loss 0.7068 | val 0.8007 | top1 99.68 | mpc 95.06 | f1 94.34 | 29.5s
+ep  29 | loss 0.7059 | val 0.7868 | top1 99.68 | mpc 97.43 | f1 97.10 | 26.9s
+ep  30 | loss 0.7051 | val 0.7928 | top1 99.52 | mpc 97.37 | f1 97.01 | 26.2s
+ep  31 | loss 0.7046 | val 0.7970 | top1 99.47 | mpc 97.36 | f1 97.02 | 28.4s
+ep  32 | loss 0.7017 | val 0.7939 | top1 99.73 | mpc 97.43 | f1 97.10 | 28.0s
+ep  33 | loss 0.7028 | val 0.7875 | top1 99.68 | mpc 97.43 | f1 97.10 | 24.4s
+ep  34 | loss 0.7012 | val 0.7947 | top1 99.57 | mpc 97.39 | f1 96.90 | 30.1s
+ep  35 | loss 0.7002 | val 0.7968 | top1 99.84 | mpc 97.48 | f1 97.17 | 27.6s
+ep  36 | loss 0.7007 | val 0.7961 | top1 99.84 | mpc 97.48 | f1 97.17 | 25.9s
+ep  37 | loss 0.6997 | val 0.7947 | top1 99.79 | mpc 97.46 | f1 97.01 | 23.7s
+ep  38 | loss 0.6996 | val 0.7830 | top1 99.84 | mpc 97.48 | f1 97.17 | 24.4s
+ep  39 | loss 0.6997 | val 0.7877 | top1 99.79 | mpc 97.46 | f1 97.15 | 25.8s
+ep  40 | loss 0.6993 | val 0.7834 | top1 99.84 | mpc 97.48 | f1 97.17 | 24.7s
+ep  41 | loss 0.6978 | val 0.7860 | top1 99.84 | mpc 97.48 | f1 97.17 | 29.5s
+ep  42 | loss 0.6980 | val 0.7868 | top1 99.84 | mpc 97.48 | f1 97.17 | 28.7s
+ep  43 | loss 0.6975 | val 0.7944 | top1 99.79 | mpc 97.45 | f1 97.13 | 28.2s
+ep  44 | loss 0.6981 | val 0.7893 | top1 99.79 | mpc 97.45 | f1 97.13 | 31.1s
+ep  45 | loss 0.6962 | val 0.7935 | top1 99.89 | mpc 97.49 | f1 97.37 | 28.7s
+ep  46 | loss 0.6960 | val 0.7869 | top1 99.84 | mpc 97.48 | f1 97.17 | 30.0s
+ep  47 | loss 0.6971 | val 0.7936 | top1 99.79 | mpc 97.46 | f1 97.15 | 27.8s
+ep  48 | loss 0.6963 | val 0.7858 | top1 99.89 | mpc 97.49 | f1 97.36 | 24.1s
+ep  49 | loss 0.6965 | val 0.7903 | top1 99.89 | mpc 97.49 | f1 97.37 | 19.2s
+ep  50 | loss 0.6959 | val 0.7854 | top1 99.68 | mpc 97.43 | f1 97.10 | 25.1s
+ep  51 | loss 0.6957 | val 0.7877 | top1 99.89 | mpc 97.49 | f1 97.36 | 30.8s
+ep  52 | loss 0.6949 | val 0.7869 | top1 99.84 | mpc 97.48 | f1 97.34 | 25.9s
+ep  53 | loss 0.6951 | val 0.7895 | top1 99.84 | mpc 97.48 | f1 97.34 | 26.5s
+ep  54 | loss 0.6955 | val 0.7895 | top1 99.79 | mpc 97.46 | f1 97.15 | 29.8s
+ep  55 | loss 0.6957 | val 0.7884 | top1 99.84 | mpc 97.48 | f1 97.17 | 29.1s
+ep  56 | loss 0.6950 | val 0.7885 | top1 99.84 | mpc 97.48 | f1 97.17 | 27.8s
+ep  57 | loss 0.6949 | val 0.7884 | top1 99.84 | mpc 97.48 | f1 97.17 | 18.2s
+ep  58 | loss 0.6948 | val 0.7866 | top1 99.84 | mpc 97.48 | f1 97.17 | 18.1s
+ep  59 | loss 0.6957 | val 0.7860 | top1 99.84 | mpc 97.48 | f1 97.17 | 18.2s
+best: top1=99.89 mpc=97.49 f1=97.37 @ep45 | wall 26.2min
+-> runs\L5_cb_ce\seed0

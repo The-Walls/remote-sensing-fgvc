@@ -1,0 +1,42 @@
+seed: 0
+deterministic: true
+data:
+  root: D:\rs-project\data\FGSCR-42-cache512
+  dup_groups: D:\rs-project\fgvc\runs\_data\FGSCR-42\dup_groups.json
+  group_aware_split: true
+  val_ratio: 0.25
+  min_val_per_class: 1
+  img_size: 448
+  native_short_side_p95: 1112
+  aug: basic
+  sampler: none
+  batch_size: 32
+  workers: 4
+  mean:
+  - 0.485
+  - 0.456
+  - 0.406
+  std:
+  - 0.229
+  - 0.224
+  - 0.225
+model:
+  name: resnet50
+  pretrained: true
+  head: gap
+  drop_rate: 0.0
+loss:
+  name: ce
+  label_smoothing: 0.1
+  cb_beta: 0.9999
+train:
+  epochs: 60
+  lr: 0.0001
+  head_lr_mult: 10.0
+  weight_decay: 0.05
+  warmup_epochs: 5
+  scheduler: cosine
+  amp_dtype: bfloat16
+  grad_clip: 1.0
+out_dir: runs
+exp_name: L1_448

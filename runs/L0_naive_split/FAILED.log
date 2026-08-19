@@ -1,0 +1,51 @@
+=== L0_naive_split seed=0 ===
+config: configs\fgscr42\L0_naive_split.yaml
+classes=42 train=5835 val=1943 groups=5233 train_imbalance=584.0x
+model=resnet50 head=gap params=23.59M img_size=224
+
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Traceback (most recent call last):
+  File "D:\rs-project\fgvc\tools\train.py", line 143, in <module>
+    main()
+    ~~~~^^
+  File "D:\rs-project\fgvc\tools\train.py", line 68, in main
+    tr = engine.train_one_epoch(model, train_loader, crit, opt, dev, ep, cfg,
+                                sched_state, log)
+  File "D:\rs-project\fgvc\src\engine.py", line 22, in train_one_epoch
+    for x, y in loader:
+                ^^^^^^
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\dataloader.py", line 741, in __next__
+    data = self._next_data()
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\dataloader.py", line 1548, in _next_data
+    return self._process_data(data, worker_id)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\dataloader.py", line 1586, in _process_data
+    data.reraise()
+    ~~~~~~~~~~~~^^
+  File "D:\rs-project\venv\Lib\site-packages\torch\_utils.py", line 785, in reraise
+    raise exception
+RuntimeError: Caught RuntimeError in DataLoader worker process 2.
+Original Traceback (most recent call last):
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\_utils\worker.py", line 358, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\_utils\fetch.py", line 57, in fetch
+    return self.collate_fn(data)
+           ~~~~~~~~~~~~~~~^^^^^^
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\_utils\collate.py", line 401, in default_collate
+    return collate(batch, collate_fn_map=default_collate_fn_map)
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\_utils\collate.py", line 215, in collate
+    collate(samples, collate_fn_map=collate_fn_map)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\_utils\collate.py", line 155, in collate
+    return collate_fn_map[elem_type](batch, collate_fn_map=collate_fn_map)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\rs-project\venv\Lib\site-packages\torch\utils\data\_utils\collate.py", line 273, in collate_tensor_fn
+    storage = elem._typed_storage()._new_shared(numel, device=elem.device)
+  File "D:\rs-project\venv\Lib\site-packages\torch\storage.py", line 1210, in _new_shared
+    untyped_storage = torch.UntypedStorage._new_shared(
+        size * self._element_size(), device=device
+    )
+  File "D:\rs-project\venv\Lib\site-packages\torch\storage.py", line 412, in _new_shared
+    return cls._new_using_filename_cpu(size)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+RuntimeError: Couldn't open shared file mapping: <torch_45276_1656638314_6>, error code: <1455>

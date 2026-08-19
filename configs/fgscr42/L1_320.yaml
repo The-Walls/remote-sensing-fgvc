@@ -1,0 +1,7 @@
+_base_: L0.yaml
+
+# L1 resolution sweep point. Only data.img_size differs from L0.
+exp_name: L1_320
+
+data:
+  img_size: 320

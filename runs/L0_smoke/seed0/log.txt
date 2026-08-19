@@ -1,0 +1,8 @@
+=== L0_smoke seed=0 ===
+config: configs\fgscr42\L0.yaml
+classes=42 train=50 val=50 groups=5233 train_imbalance=7.0x
+model=resnet50 head=gap params=23.59M img_size=224
+ep   0 | loss 3.7421 | val 3.6938 | top1 4.00 | mpc 3.51 | f1 1.63 | 18.1s
+ep   1 | loss 3.6509 | val 3.6673 | top1 6.00 | mpc 4.82 | f1 2.93 | 0.1s
+best: top1=6.00 mpc=4.82 f1=2.93 @ep1 | wall 0.6min
+-> runs\L0_smoke\seed0

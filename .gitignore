@@ -1,0 +1,32 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Editors and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*
+
+# Local datasets and caches
+data/
+cache/
+tmp/
+
+# Model checkpoints and export artifacts
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.tmp
+
+# Meeting-document rendering QA artifacts
+runs/_analysis/meeting_doc_assets/
+runs/_analysis/meeting_doc_render_word/
+runs/_analysis/meeting_doc_a11y*.json
+runs/_analysis/simple_word_test.*

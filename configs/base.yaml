@@ -1,0 +1,50 @@
+# Defaults for every experiment. A rung config overrides ONE field of its parent.
+# Every value here is a deliberate choice; the reason is on the line.
+
+seed: 0
+deterministic: true          # cudnn.deterministic -- reproducibility over speed;
+                             # measured cost is logged as `det_overhead_pct`
+
+data:
+  root: ""                   # ImageFolder root
+  dup_groups: ""             # dedup_check.py output; enables group-aware splitting
+  group_aware_split: true    # duplicates stay inside one split (see REPORT finding 1)
+  val_ratio: 0.25
+  min_val_per_class: 1       # tail classes have as few as 2 unique images
+  img_size: 224
+  native_short_side_p95: 0   # per-dataset, from inspect_data.py; sweep points above
+                             # this are marked "upsampled" in the table, not silently
+  aug: basic                 # basic | rs_rot
+  sampler: none              # none | balanced  (appendix only; L5 uses cb_ce)
+  batch_size: 32             # fits @448 on 24GB+; halved automatically on OOM
+  workers: 4              # Windows backs DataLoader shared memory with the C:
+                          # pagefile (4 GB here). 8 workers at 448px crashed with
+                          # "Couldn't open shared file mapping ... 1455"; runs are
+                          # also queued serially by tools/run_ladder.py.
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+
+model:
+  name: resnet50             # timm id -- never hand-rolled
+  pretrained: true
+  head: gap                  # gap | compact_bilinear | cbam
+  drop_rate: 0.0
+
+loss:
+  name: ce                   # ce | cb_ce
+  label_smoothing: 0.1       # class boundaries are genuinely ambiguous in FGVC
+  cb_beta: 0.9999            # class-balanced loss (Cui et al. 2019), fixed per decision
+
+train:
+  epochs: 60                 # ~3900 train imgs / bs32 = 122 it/ep -> ~7.3k iters
+  lr: 0.0001                 # full fine-tune of a pretrained backbone; 3e-4 causes
+                             # catastrophic forgetting at this dataset size
+  head_lr_mult: 10.0         # randomly-initialised head needs to move faster
+  weight_decay: 0.05         # timm default for ConvNeXt/ViT recipes
+  warmup_epochs: 5           # small data: stabilises the first epochs noticeably
+  scheduler: cosine
+  amp_dtype: bfloat16        # Blackwell native; no GradScaler, more stable than fp16
+  grad_clip: 1.0
+
+out_dir: runs
+exp_name: L0

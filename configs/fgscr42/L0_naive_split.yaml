@@ -1,0 +1,9 @@
+_base_: L0.yaml
+
+# Control for the leakage finding: identical to L0 in every respect except that
+# duplicate groups are allowed to straddle the split, which is what a plain
+# stratified split does. The gap between this and L0 IS the leakage effect.
+exp_name: L0_naive_split
+
+data:
+  group_aware_split: false

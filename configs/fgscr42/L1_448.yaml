@@ -1,0 +1,9 @@
+_base_: L0.yaml
+
+# L1 resolution sweep point. Only data.img_size differs from L0.
+# 448 < the 512 cache ceiling and < the native p95 (1112), so this reads real
+# pixels for the 56% of images whose shorter side is already >= 448.
+exp_name: L1_448
+
+data:
+  img_size: 448

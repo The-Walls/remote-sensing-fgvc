@@ -1,0 +1,66 @@
+=== L6a_convnext_tiny seed=0 ===
+config: configs\fgscr42\L6a_convnext.yaml
+classes=42 train=5898 val=1880 groups=5233 train_imbalance=583.0x
+model=convnext_tiny head=gap params=27.85M img_size=448
+ep   0 | loss 2.5810 | val 1.6490 | top1 67.50 | mpc 33.96 | f1 32.47 | 35.2s
+ep   1 | loss 1.2585 | val 1.0501 | top1 90.21 | mpc 68.31 | f1 66.17 | 28.3s
+ep   2 | loss 0.9227 | val 0.8743 | top1 94.63 | mpc 81.74 | f1 81.78 | 26.1s
+ep   3 | loss 0.8395 | val 0.8104 | top1 97.87 | mpc 87.70 | f1 87.18 | 22.8s
+ep   4 | loss 0.8057 | val 0.8235 | top1 96.91 | mpc 80.24 | f1 78.64 | 24.7s
+ep   5 | loss 0.7968 | val 0.7777 | top1 98.40 | mpc 87.44 | f1 87.24 | 24.1s
+ep   6 | loss 0.7500 | val 0.7798 | top1 98.09 | mpc 84.20 | f1 84.87 | 22.8s
+ep   7 | loss 0.7365 | val 0.7476 | top1 98.72 | mpc 89.29 | f1 88.77 | 22.5s
+ep   8 | loss 0.7188 | val 0.7693 | top1 97.82 | mpc 87.95 | f1 87.16 | 16.6s
+ep   9 | loss 0.7098 | val 0.7396 | top1 98.19 | mpc 85.48 | f1 85.87 | 16.5s
+ep  10 | loss 0.7074 | val 0.7243 | top1 99.15 | mpc 90.39 | f1 89.93 | 23.3s
+ep  11 | loss 0.6986 | val 0.7064 | top1 99.52 | mpc 93.18 | f1 93.57 | 20.3s
+ep  12 | loss 0.6963 | val 0.7031 | top1 99.57 | mpc 96.11 | f1 96.13 | 24.2s
+ep  13 | loss 0.6934 | val 0.7098 | top1 99.20 | mpc 95.30 | f1 94.83 | 24.0s
+ep  14 | loss 0.6912 | val 0.6979 | top1 99.57 | mpc 94.74 | f1 95.37 | 20.6s
+ep  15 | loss 0.7005 | val 0.7109 | top1 99.36 | mpc 96.94 | f1 96.32 | 16.6s
+ep  16 | loss 0.6912 | val 0.6969 | top1 99.63 | mpc 97.40 | f1 96.79 | 21.9s
+ep  17 | loss 0.6954 | val 0.7042 | top1 99.41 | mpc 94.90 | f1 94.95 | 27.2s
+ep  18 | loss 0.6877 | val 0.6958 | top1 99.68 | mpc 93.51 | f1 93.74 | 21.7s
+ep  19 | loss 0.6916 | val 0.7033 | top1 99.36 | mpc 96.13 | f1 96.13 | 22.3s
+ep  20 | loss 0.6885 | val 0.7017 | top1 99.52 | mpc 97.38 | f1 97.25 | 22.7s
+ep  21 | loss 0.6876 | val 0.7067 | top1 99.41 | mpc 94.98 | f1 94.81 | 22.0s
+ep  22 | loss 0.6872 | val 0.6904 | top1 99.79 | mpc 97.18 | f1 97.17 | 22.6s
+ep  23 | loss 0.6885 | val 0.6976 | top1 99.63 | mpc 96.24 | f1 96.47 | 22.2s
+ep  24 | loss 0.6901 | val 0.7039 | top1 99.36 | mpc 91.67 | f1 91.90 | 22.1s
+ep  25 | loss 0.6891 | val 0.7127 | top1 99.15 | mpc 96.50 | f1 96.30 | 21.6s
+ep  26 | loss 0.6896 | val 0.7213 | top1 98.99 | mpc 96.06 | f1 96.25 | 24.7s
+ep  27 | loss 0.6869 | val 0.6934 | top1 99.79 | mpc 97.46 | f1 97.32 | 23.6s
+ep  28 | loss 0.6852 | val 0.7058 | top1 99.36 | mpc 94.87 | f1 94.45 | 22.9s
+ep  29 | loss 0.6841 | val 0.6969 | top1 99.63 | mpc 95.05 | f1 94.86 | 22.1s
+ep  30 | loss 0.6842 | val 0.6904 | top1 99.79 | mpc 97.46 | f1 97.32 | 20.5s
+ep  31 | loss 0.6841 | val 0.6914 | top1 99.73 | mpc 97.16 | f1 97.15 | 22.0s
+ep  32 | loss 0.6836 | val 0.6896 | top1 99.73 | mpc 97.16 | f1 97.16 | 23.7s
+ep  33 | loss 0.6839 | val 0.6890 | top1 99.89 | mpc 97.49 | f1 97.35 | 23.1s
+ep  34 | loss 0.6845 | val 0.6929 | top1 99.79 | mpc 97.46 | f1 97.32 | 23.8s
+ep  35 | loss 0.6839 | val 0.6922 | top1 99.79 | mpc 97.46 | f1 97.32 | 23.7s
+ep  36 | loss 0.6835 | val 0.6926 | top1 99.79 | mpc 97.46 | f1 97.32 | 23.0s
+ep  37 | loss 0.6838 | val 0.6904 | top1 99.79 | mpc 97.46 | f1 97.32 | 22.2s
+ep  38 | loss 0.6835 | val 0.6909 | top1 99.79 | mpc 97.46 | f1 97.33 | 23.0s
+ep  39 | loss 0.6836 | val 0.6879 | top1 99.89 | mpc 97.49 | f1 97.36 | 26.5s
+ep  40 | loss 0.6837 | val 0.6874 | top1 99.89 | mpc 97.49 | f1 97.35 | 26.5s
+ep  41 | loss 0.6834 | val 0.6873 | top1 99.89 | mpc 97.49 | f1 97.36 | 24.5s
+ep  42 | loss 0.6835 | val 0.6982 | top1 99.63 | mpc 97.41 | f1 97.27 | 22.1s
+ep  43 | loss 0.6839 | val 0.6967 | top1 99.63 | mpc 97.41 | f1 97.27 | 23.2s
+ep  44 | loss 0.6832 | val 0.6964 | top1 99.63 | mpc 97.41 | f1 97.27 | 23.8s
+ep  45 | loss 0.6831 | val 0.6969 | top1 99.63 | mpc 97.41 | f1 96.80 | 24.1s
+ep  46 | loss 0.6832 | val 0.6949 | top1 99.63 | mpc 97.41 | f1 96.80 | 24.9s
+ep  47 | loss 0.6831 | val 0.6932 | top1 99.73 | mpc 97.44 | f1 97.30 | 20.7s
+ep  48 | loss 0.6830 | val 0.6930 | top1 99.73 | mpc 97.44 | f1 97.31 | 19.5s
+ep  49 | loss 0.6830 | val 0.6931 | top1 99.73 | mpc 97.44 | f1 97.30 | 25.9s
+ep  50 | loss 0.6829 | val 0.6942 | top1 99.68 | mpc 97.43 | f1 97.29 | 26.6s
+ep  51 | loss 0.6830 | val 0.6946 | top1 99.68 | mpc 97.43 | f1 97.29 | 26.6s
+ep  52 | loss 0.6830 | val 0.6931 | top1 99.73 | mpc 97.44 | f1 97.30 | 26.2s
+ep  53 | loss 0.6828 | val 0.6936 | top1 99.68 | mpc 97.43 | f1 97.29 | 25.0s
+ep  54 | loss 0.6829 | val 0.6937 | top1 99.68 | mpc 97.43 | f1 97.29 | 27.5s
+ep  55 | loss 0.6828 | val 0.6937 | top1 99.68 | mpc 97.43 | f1 97.29 | 26.3s
+ep  56 | loss 0.6828 | val 0.6936 | top1 99.68 | mpc 97.43 | f1 97.29 | 22.6s
+ep  57 | loss 0.6828 | val 0.6938 | top1 99.68 | mpc 97.43 | f1 97.29 | 19.2s
+ep  58 | loss 0.6827 | val 0.6937 | top1 99.68 | mpc 97.43 | f1 97.29 | 23.0s
+ep  59 | loss 0.6830 | val 0.6937 | top1 99.68 | mpc 97.43 | f1 97.29 | 23.0s
+best: top1=99.89 mpc=97.49 f1=97.35 @ep33 | wall 26.7min
+-> runs\L6a_convnext_tiny\seed0

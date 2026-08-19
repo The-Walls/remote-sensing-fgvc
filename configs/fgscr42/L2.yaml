@@ -1,0 +1,9 @@
+_base_: L1_448.yaml
+
+# Only data.aug differs from L1_448 (its parent). Domain difficulty #2:
+# overhead imagery has no canonical up, so the dihedral group + free rotation
+# is label-preserving here in a way it is not for natural images.
+exp_name: L2
+
+data:
+  aug: rs_rot

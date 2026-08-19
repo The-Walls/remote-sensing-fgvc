@@ -1,0 +1,7 @@
+_base_: L2.yaml
+
+# Only model.name differs from L2. Backbone sensitivity.
+exp_name: L6a_convnext_tiny
+
+model:
+  name: convnext_tiny
