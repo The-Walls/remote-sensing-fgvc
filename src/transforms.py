@@ -9,6 +9,11 @@ preserving augmentation here, unlike in natural-image classification.
   rs_zoom  resize larger, horizontal flip, centre-crop -- rs_rot with the
            orientation part removed, so L2 - L2z isolates orientation and
            L2z - L1 isolates the zoom/crop that rs_rot needs anyway
+  rs_rot_reflect
+           rs_rot without the zoom: resize to the eval size, pad by
+           reflection to the same 1.366x canvas, rotate, centre-crop. The
+           centre keeps the eval scale and the corners free rotation would
+           blacken are mirrored content (L2r)
 """
 import math
 
@@ -52,6 +57,18 @@ def build(cfg, train: bool):
         return T.Compose([
             T.Resize((big, big), antialias=True),
             T.RandomHorizontalFlip(),
+            T.CenterCrop(size),
+        ] + norm)
+
+    if aug == "rs_rot_reflect":
+        pad = (big - size + 1) // 2          # same canvas as rs_rot, no zoom
+        return T.Compose([
+            T.Resize((size, size), antialias=True),
+            T.Pad(pad, padding_mode="reflect"),
+            T.RandomHorizontalFlip(),
+            T.RandomVerticalFlip(),
+            T.RandomChoice([T.RandomRotation((a, a)) for a in (0, 90, 180, 270)]),
+            T.RandomRotation(ROT_DEG, interpolation=T.InterpolationMode.BILINEAR),
             T.CenterCrop(size),
         ] + norm)
 

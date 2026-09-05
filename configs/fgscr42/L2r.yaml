@@ -1,0 +1,12 @@
+_base_: L1_448.yaml
+
+# rs_rot without the zoom. L2z showed the 1.366x resize-then-centre-crop that
+# rs_rot uses to hide rotation's black corners costs about 1.7 pp MPC(support>=5)
+# on its own, and the orientation augmentation on top of it wins about 2 back.
+# Here the canvas is built by reflection padding instead: the centre stays at
+# the eval scale, the corners are mirrored content. L2r - L1_448 is the
+# orientation augmentation with the scale mismatch removed.
+exp_name: L2r_rot_reflect
+
+data:
+  aug: rs_rot_reflect

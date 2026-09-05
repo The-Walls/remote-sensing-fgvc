@@ -15,6 +15,7 @@ data:
                              # groups becomes test 1 / train 1 / val 0
   img_size: 224
   aug: basic                 # basic | rs_rot | rs_zoom (rs_rot minus the rotations)
+                             # | rs_rot_reflect (rs_rot minus the zoom)
   sampler: none              # none | balanced  (appendix only; L5 uses cb_ce)
   batch_size: 32             # fits @448 on 24GB+; halved automatically on OOM
   workers: 4              # Windows backs DataLoader shared memory with the C:

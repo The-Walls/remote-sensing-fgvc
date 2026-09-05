@@ -21,7 +21,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src import config, data, metrics, models   # noqa: E402
 
-LADDER = ["L0", "L0_naive_split", "L1_320", "L1_448", "L2", "L2z_zoom_only",
+LADDER = ["L0", "L0_naive_split", "L1_320", "L1_448", "L2", "L2z_zoom_only", "L2r_rot_reflect",
           "L3_compact_bilinear", "L4_cbam", "L5_cb_ce",
           "L6a_convnext_tiny", "L6b_vit_base_p16"]
 PARENT = {
@@ -30,6 +30,7 @@ PARENT = {
     "L1_448": "L0",
     "L2": "L1_448",
     "L2z_zoom_only": "L1_448",
+    "L2r_rot_reflect": "L1_448",
     "L3_compact_bilinear": "L2",
     "L4_cbam": "L2",
     "L5_cb_ce": "L2",
