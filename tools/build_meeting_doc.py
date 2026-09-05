@@ -17,7 +17,7 @@ from docx.shared import Inches, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "遥感图像细粒度识别_实现算法与组会汇报说明.docx"
-ASSET_DIR = ROOT / "runs" / "_analysis" / "meeting_doc_assets"
+ASSET_DIR = ROOT / "runs" / "_v1_seed0_valonly" / "_analysis" / "meeting_doc_assets"
 ASSET_DIR.mkdir(parents=True, exist_ok=True)
 
 LETTER_W_DXA = 12240
@@ -952,10 +952,10 @@ def add_experiments(doc, bullet_id):
     add_bullet(doc, "L4 CBAM 相对 L2：全类 MPC -1.19，没有得到正向证据。", bullet_id, "L4 CBAM 相对 L2：")
     add_bullet(doc, "L5、ConvNeXt、ViT 的 Top-1/全类 MPC/MPC>=5 几乎相同；L5 参数更少、速度更快、Macro-F1 最高，因此是当前主候选。", bullet_id, "L5、ConvNeXt、ViT：")
 
-    curve = ROOT / "runs" / "L5_cb_ce" / "seed0" / "curves.png"
+    curve = ROOT / "runs" / "_v1_seed0_valonly" / "L5_cb_ce" / "seed0" / "curves.png"
     add_picture(doc, curve, 6.2, "图 4  L5 的损失与验证指标曲线", "L5 类别平衡交叉熵实验的训练损失和验证准确率曲线")
 
-    errors = ROOT / "runs" / "_analysis" / "errors_L5_cb_ce.png"
+    errors = ROOT / "runs" / "_v1_seed0_valonly" / "_analysis" / "errors_L5_cb_ce.png"
     add_picture(doc, errors, 6.15, "图 5  L5 验证集仅有的两张误分类样本", "L5 最佳模型的两张误分类舰船图像及真实和预测标签")
 
 
@@ -1091,17 +1091,17 @@ def add_document_properties(doc: Document):
 def validate_sources():
     required = [
         ROOT / "REPORT.md",
-        ROOT / "runs" / "_analysis" / "TABLE.md",
+        ROOT / "runs" / "_v1_seed0_valonly" / "_analysis" / "TABLE.md",
         ROOT / "runs" / "_data" / "FGSCR-42" / "distribution.png",
         ROOT / "runs" / "_data" / "FGSCR-42" / "dup_examples.png",
-        ROOT / "runs" / "L5_cb_ce" / "seed0" / "curves.png",
-        ROOT / "runs" / "_analysis" / "errors_L5_cb_ce.png",
+        ROOT / "runs" / "_v1_seed0_valonly" / "L5_cb_ce" / "seed0" / "curves.png",
+        ROOT / "runs" / "_v1_seed0_valonly" / "_analysis" / "errors_L5_cb_ce.png",
     ]
     missing = [str(p) for p in required if not p.exists()]
     if missing:
         raise FileNotFoundError("missing required inputs:\n" + "\n".join(missing))
 
-    metrics = json.loads((ROOT / "runs" / "L5_cb_ce" / "seed0" / "metrics.json").read_text(encoding="utf-8"))
+    metrics = json.loads((ROOT / "runs" / "_v1_seed0_valonly" / "L5_cb_ce" / "seed0" / "metrics.json").read_text(encoding="utf-8"))
     expected = (99.89, 97.49, 97.37)
     actual = (
         round(metrics["overall_top1"] * 100, 2),

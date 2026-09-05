@@ -26,11 +26,14 @@ def main():
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    jobs = []
+    cfgs = []
     for pattern in args.configs:
         for c in sorted(Path().glob(pattern)) or [Path(pattern)]:
             if c.exists() and c.name != "base.yaml":
-                jobs += [(c, s) for s in args.seeds]
+                cfgs.append(c)
+    # seed-major: the whole ladder for seed 0 exists after the first third of
+    # the queue, so the table can be sanity-checked before the other seeds land
+    jobs = [(c, s) for s in args.seeds for c in cfgs]
 
     print(f"queued {len(jobs)} run(s)\n")
     done, failed, skipped = [], [], []

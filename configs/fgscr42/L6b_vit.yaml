@@ -1,9 +1,11 @@
 _base_: L2.yaml
 
 # Only model.name differs from L2. Backbone sensitivity.
-# ViT-B/16 at 448 is 784 tokens; batch size is halved automatically if it OOMs
-# and the event is recorded in metrics.json, since that breaks like-for-like.
+# The 384-pretrained ViT-B/16 is used so the 448 input needs a 384->448
+# position-embedding interpolation rather than 224->448. 784 tokens at 448;
+# batch size is halved automatically if it OOMs and the event is recorded in
+# metrics.json, since that breaks like-for-like.
 exp_name: L6b_vit_base_p16
 
 model:
-  name: vit_base_patch16_224
+  name: vit_base_patch16_384

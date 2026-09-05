@@ -30,3 +30,8 @@ runs/_analysis/meeting_doc_assets/
 runs/_analysis/meeting_doc_render_word/
 runs/_analysis/meeting_doc_a11y*.json
 runs/_analysis/simple_word_test.*
+
+# Ladder driver logs
+runs/_ladder_*.log
+runs/_ladder_*.err
+runs/*_smoke/

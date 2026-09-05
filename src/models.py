@@ -109,13 +109,29 @@ def build(cfg, num_classes):
 
 
 def param_groups(model, base_lr, head_mult, weight_decay):
-    """Backbone at base_lr, freshly-initialised head at head_mult x base_lr."""
+    """Backbone at base_lr, freshly-initialised head at head_mult x base_lr.
+
+    Norm weights, biases (every 1-d parameter) and whatever the timm model lists
+    in `no_weight_decay()` (ViT pos_embed / cls_token) get no weight decay, as
+    in the timm ConvNeXt/ViT recipes; pulling scale parameters toward zero is
+    not regularisation.
+    """
     head_names = ("fc.", "attn.", "cbp.")
-    head, back = [], []
+    skip = {f"backbone.{n}" for n in
+            getattr(model.backbone, "no_weight_decay", lambda: ())()}
+    buckets = {}
     for n, p in model.named_parameters():
-        if p.requires_grad:
-            (head if n.startswith(head_names) else back).append(p)
-    return [
-        {"params": back, "lr": base_lr, "weight_decay": weight_decay},
-        {"params": head, "lr": base_lr * head_mult, "weight_decay": weight_decay},
-    ]
+        if not p.requires_grad:
+            continue
+        is_head = n.startswith(head_names)
+        no_decay = p.ndim <= 1 or n in skip
+        buckets.setdefault((is_head, no_decay), []).append(p)
+    groups = []
+    for (is_head, no_decay), params in sorted(buckets.items()):
+        groups.append({
+            "params": params,
+            "lr": base_lr * (head_mult if is_head else 1.0),
+            "weight_decay": 0.0 if no_decay else weight_decay,
+            "name": ("head" if is_head else "backbone") + ("_no_decay" if no_decay else ""),
+        })
+    return groups

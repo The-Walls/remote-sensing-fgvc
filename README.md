@@ -12,22 +12,23 @@
 - Class-Balanced Cross Entropy 处理长尾类别
 - AdamW、warmup、cosine learning-rate schedule 与 bfloat16 AMP
 
+## 评测协议
+
+- **分组感知三分切分**：近重复图像先被 `tools/dedup_check.py` 合并成组，整组进同一个 split，
+  按类别分层，唯一图像组的 60% / 20% / 20% 进 train / val / test。
+- **val 只负责选 epoch**（按全类 mean-per-class top-1），**test 在该 epoch 上只算一次**，报的就是它。
+  没有独立测试集时，用同一个 val 既选 epoch 又报分等于取一条噪声序列的最大值，见 REPORT §4。
+- **3 个种子**，种子同时控制切分与初始化，`mean ± std` 里含切分方差。
+- 每档只比父级多改一个字段，`analyze.py` 自动打印 Δ 与父级字段 diff。
+
+FGSCR-42 公开数据包含 7,778 张图像、42 个类别，去重后 5,233 个图像组。**FGSCR-42 没有官方
+train/test 划分**，本仓库的数字不能与已发表结果直接比较。
+
 ## 当前结果
 
-FGSCR-42 公开数据包含 7,778 张图像、42 个类别。去重后得到 5,233 个图像组，朴素随机切分会使 44.78% 的验证图像在训练集中存在近重复样本。
-
-指标为**收敛值**（最后 10 个 epoch 的均值 ± epoch 间抖动），不是验证集上最好的那个 epoch——本项目没有独立测试集，用同一个 val 既选 checkpoint 又报分数会奖励曲线抖动最大的配置，理由与实测见 [REPORT.md](REPORT.md) §4.0。
-
-当前 seed 0 最佳配置为 `L5`（ResNet50 @448 + 旋转增强 + class-balanced CE）：
-
-| Metric | Result |
-|---|---:|
-| Overall top-1 | 99.82 ± 0.05 |
-| Mean-per-class top-1 | 97.47 ± 0.02 |
-| MPC (support >= 5) | 99.79 ± 0.02 |
-| Macro-F1 | 97.21 ± 0.09 |
-
-但 `L2`/`L5`/`L6a`/`L6b` 在 30 个 support≥5 的类别上全部落在 99.71–99.79%，彼此无差异；模块之间的差距只出现在验证支持 1–4 张的尾部类，单种子下属候选信号。完整实验分析见 [REPORT.md](REPORT.md)，组会说明见 `遥感图像细粒度识别_实现算法与组会汇报说明.docx`。
+按上述协议的 3 种子重跑正在进行，结果落盘后由 `tools/analyze.py` 写入 `runs/_analysis/TABLE.md`
+并同步到 [REPORT.md](REPORT.md)。此前 seed 0、仅用 val 报分、旋转填充修正前的一轮结果归档在
+`runs/_v1_seed0_valonly/`，只作历史参考。
 
 ## 环境
 
@@ -53,7 +54,7 @@ CUDA 版本的 PyTorch 建议根据显卡和 CUDA 环境从 PyTorch 官方安装
 
 ```powershell
 python tools/inspect_data.py D:/path/to/FGSCR-42 --out runs/_data/FGSCR-42
-python tools/dedup_check.py  D:/path/to/FGSCR-42 --out runs/_data/FGSCR-42
+python tools/dedup_check.py  D:/path/to/FGSCR-42 --out runs/_data/FGSCR-42 --val-ratio 0.2 --test-ratio 0.2
 ```
 
 2. 建 JPEG 缓存。FGSCR-42 原包是 8.4 GB 的 BMP，60 个 epoch 直接读会被 I/O 主导；
@@ -69,7 +70,6 @@ python tools/make_cache.py D:/path/to/FGSCR-42 D:/path/to/FGSCR-42-cache512
 data:
   root: D:/path/to/FGSCR-42-cache512                 # 训练读缓存
   dup_groups: D:/path/to/fgvc/runs/_data/FGSCR-42/dup_groups.json   # 启用分组感知切分
-  native_short_side_p95: 1112                        # inspect_data.py 对原图的统计
 ```
 
 ## 训练与分析
@@ -91,8 +91,7 @@ python tools/train.py configs/fgscr42/L5.yaml --set seed=1 train.epochs=30
 精确恢复模型、优化器、学习率调度和随机状态：
 
 ```powershell
-python tools/run_ladder.py configs/fgscr42/L*.yaml --seeds 0
-python tools/run_ladder.py configs/fgscr42/L*.yaml --seeds 1 2   # 多种子复验
+python tools/run_ladder.py configs/fgscr42/L*.yaml --seeds 0 1 2
 ```
 
 汇总对照表、selection-gap 表、混淆矩阵和错分样例，写到 `runs/_analysis/`：

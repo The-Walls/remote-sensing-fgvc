@@ -5,7 +5,7 @@ from pathlib import Path
 import pypdfium2 as pdfium
 
 
-OUT = Path(r"D:\rs-project\fgvc\runs\_analysis\meeting_doc_render_word")
+OUT = Path(r"D:\rs-project\fgvc\runs\_v1_seed0_valonly\_analysis\meeting_doc_render_word")
 PDF = OUT / "meeting_brief_final.pdf"
 
 

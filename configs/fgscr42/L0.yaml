@@ -7,7 +7,6 @@ data:
   # 512 is above every sweep point, so no experiment sees a degraded image.
   root: D:\rs-project\data\FGSCR-42-cache512
   dup_groups: D:\rs-project\fgvc\runs\_data\FGSCR-42\dup_groups.json
-  native_short_side_p95: 1112      # inspect_data.py on the ORIGINAL tree
   img_size: 224
   aug: basic
 

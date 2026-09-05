@@ -18,24 +18,24 @@ A full-frame match with a **non**-matching centre crop means the two images shar
 - of which **cross-class**: **10** pairs -- the same background plate carries targets of different types, i.e. the imagery is at least partly composited rather than natively cropped
 
 ## Leakage under a naive (non group-aware) stratified split
-- val size: 1943 (ratio 0.25)
-- cross-split duplicate pairs: **1888**
-- val images having a twin in train: **870**
-- **leakage rate: 44.78% of val**
+- held-out size (val + test): 3117 (ratios val 0.2, test 0.2)
+- train/held-out duplicate pairs: **2334**
+- held-out images having a twin in train: **1240**
+- **leakage rate: 39.78% of held-out**
 
 verdict: **LEAKAGE > 5% -- val accuracy is inflated, flag in REPORT.md**
 
 ## Residual leakage of the GROUP-AWARE split (threshold sweep)
 
-Split as actually trained on: val size 1880. Grouping is built at Hamming <= 5, so 0% at that threshold is true by construction. Loosening the threshold asks whether near-duplicates slipped through. Once `cross-class` climbs, the threshold has stopped meaning "duplicate" and the row is an upper bound, not a measurement.
+Split as actually trained on: held-out (val + test) size 3040. Grouping is built at Hamming <= 5, so 0% at that threshold is true by construction. Loosening the threshold asks whether near-duplicates slipped through. Once `cross-class` climbs, the threshold has stopped meaning "duplicate" and the row is an upper bound, not a measurement.
 
-| Hamming <= | cross-split pairs | val images with a train twin | % of val | of which cross-class |
+| Hamming <= | train/held-out pairs | held-out images with a train twin | % of held-out | of which cross-class |
 |---:|---:|---:|---:|---:|
 | 5 | 0 | 0 | 0.00% | 0 |
-| 8 | 93 | 51 | 2.71% | 2 |
-| 10 | 150 | 79 | 4.20% | 6 |
-| 12 | 288 | 148 | 7.87% | 32 |
-| 16 | 1673 | 592 | 31.49% | 721 |
+| 8 | 116 | 53 | 1.74% | 2 |
+| 10 | 215 | 98 | 3.22% | 6 |
+| 12 | 436 | 199 | 6.55% | 33 |
+| 16 | 2369 | 838 | 27.57% | 941 |
 
 ## Cross-class duplicate pairs (label-quality issue)
 

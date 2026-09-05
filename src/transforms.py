@@ -2,8 +2,13 @@
 
 Domain difficulty #2 (arbitrary target orientation): overhead imagery has no
 canonical "up", so the dihedral group + free rotation is a legitimate label-
-preserving augmentation here, unlike in natural-image classification. `rs_rot`
-is the only thing that differs from `basic`, so the L1->L2 comparison isolates it.
+preserving augmentation here, unlike in natural-image classification.
+
+  basic    resize + horizontal flip
+  rs_rot   resize larger, dihedral group + free rotation, centre-crop (L2)
+  rs_zoom  resize larger, horizontal flip, centre-crop -- rs_rot with the
+           orientation part removed, so L2 - L2z isolates orientation and
+           L2z - L1 isolates the zoom/crop that rs_rot needs anyway
 """
 import math
 
@@ -25,14 +30,15 @@ def build(cfg, train: bool):
     if not train:
         return T.Compose([T.Resize((size, size), antialias=True)] + norm)
 
-    if cfg["data"]["aug"] == "basic":
+    aug = cfg["data"]["aug"]
+    if aug == "basic":
         return T.Compose([
             T.Resize((size, size), antialias=True),
             T.RandomHorizontalFlip(),
         ] + norm)
 
-    if cfg["data"]["aug"] == "rs_rot":
-        big = math.ceil(size * ROT_PAD)   # ceil: never a sub-pixel short of the inscribed square
+    big = math.ceil(size * ROT_PAD)   # ceil: never a sub-pixel short of the inscribed square
+    if aug == "rs_rot":
         return T.Compose([
             T.Resize((big, big), antialias=True),
             T.RandomHorizontalFlip(),
@@ -42,4 +48,11 @@ def build(cfg, train: bool):
             T.CenterCrop(size),
         ] + norm)
 
-    raise ValueError(f"unknown aug: {cfg['data']['aug']}")
+    if aug == "rs_zoom":
+        return T.Compose([
+            T.Resize((big, big), antialias=True),
+            T.RandomHorizontalFlip(),
+            T.CenterCrop(size),
+        ] + norm)
+
+    raise ValueError(f"unknown aug: {aug}")

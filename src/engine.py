@@ -1,4 +1,4 @@
-"""Train / eval loops with bf16 autocast and OOM-triggered batch-size backoff."""
+"""Train / eval loops with bf16 autocast. evaluate() serves val and test alike."""
 import math
 import time
 
@@ -56,5 +56,5 @@ def evaluate(model, loader, crit, dev, cfg, n_classes, keep_preds=False):
     y_true, y_pred = np.concatenate(ys), np.concatenate(ps)
     cm = metrics.confusion(y_true, y_pred, n_classes)
     out = metrics.summarize(cm)
-    out["val_loss"] = tot / max(n, 1)
+    out["loss"] = tot / max(n, 1)
     return out, cm, (y_true, y_pred) if keep_preds else None

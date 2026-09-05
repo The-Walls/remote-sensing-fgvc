@@ -40,18 +40,25 @@ class NetTest(unittest.TestCase):
                 self.assertEqual(tuple(model(x).shape), (2, 7), head)
             self.assertGreater(n_params, 0)
 
-    def test_param_groups_split_head_from_backbone(self):
+    def test_param_groups_split_head_and_exclude_norm_bias_from_decay(self):
         model, _ = models.build(self._cfg("cbam"), num_classes=7)
-        back, head = models.param_groups(model, 1e-4, 10.0, 0.05)
-        self.assertAlmostEqual(back["lr"], 1e-4)
-        self.assertAlmostEqual(head["lr"], 1e-3)
-        n_head = sum(p.numel() for p in head["params"])
-        n_expected = sum(p.numel() for n, p in model.named_parameters()
-                         if n.startswith(("fc.", "attn.", "cbp.")))
-        self.assertEqual(n_head, n_expected)
-        self.assertGreater(n_head, 0)
-        self.assertEqual(sum(p.numel() for p in back["params"]) + n_head,
-                         sum(p.numel() for p in model.parameters()))
+        groups = models.param_groups(model, 1e-4, 10.0, 0.05)
+        self.assertEqual({g["name"] for g in groups},
+                         {"backbone", "backbone_no_decay", "head", "head_no_decay"})
+        covered = 0
+        for g in groups:
+            is_head = g["name"].startswith("head")
+            self.assertAlmostEqual(g["lr"], 1e-3 if is_head else 1e-4)
+            if g["name"].endswith("no_decay"):
+                self.assertEqual(g["weight_decay"], 0.0)
+                self.assertTrue(all(p.ndim <= 1 for p in g["params"]))   # norms + biases
+            else:
+                self.assertEqual(g["weight_decay"], 0.05)
+                self.assertTrue(all(p.ndim > 1 for p in g["params"]))
+            covered += sum(p.numel() for p in g["params"])
+        self.assertEqual(covered, sum(p.numel() for p in model.parameters()))
+        # the optimiser must accept these groups as-is (extra "name" key included)
+        torch.optim.AdamW(groups)
 
 
 if __name__ == "__main__":

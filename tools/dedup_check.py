@@ -18,7 +18,7 @@ Outputs dup_groups.json (consumed by src/data.py), a report, and a montage of
 example pairs so the threshold can be eyeballed.
 
 Usage:
-    python tools/dedup_check.py <root> [--out DIR] [--thresh 5] [--val-ratio 0.25]
+    python tools/dedup_check.py <root> [--out DIR] [--thresh 5] [--val-ratio 0.2] [--test-ratio 0.2]
 """
 import argparse
 import json
@@ -160,23 +160,30 @@ def union_groups(n, pairs):
     return [find(i) for i in range(n)]
 
 
-def naive_split_leakage(labels, groups, pairs, val_ratio, seed=0):
-    """Cross-split duplicate pairs the naive split produces.
+def _holdout_mask(labels, groups, val_ratio, test_ratio, seed, group_aware):
+    """0 = train, 1 = held out (val or test), for the split training actually uses."""
+    tr, va, te = split_indices(list(labels), list(groups), val_ratio, test_ratio,
+                               seed, min_holdout_per_class=1, group_aware=group_aware)
+    split = np.zeros(len(labels), dtype=np.int8)
+    split[va] = 1
+    split[te] = 1
+    return split, len(va) + len(te)
+
+
+def naive_split_leakage(labels, groups, pairs, val_ratio, test_ratio, seed=0):
+    """Train/held-out duplicate pairs the naive split produces.
 
     Uses src.data.split_indices with group_aware=False -- i.e. the exact split
     the L0_naive_split run trains on. Rolling a separate RNG split here would
     report leakage for a split no experiment ever used.
     """
-    tr, va = split_indices(list(labels), list(groups), val_ratio, seed,
-                           min_val_per_class=1, group_aware=False)
-    split = np.zeros(len(labels), dtype=np.int8)      # 0 train, 1 val
-    split[va] = 1
+    split, n_holdout = _holdout_mask(labels, groups, val_ratio, test_ratio, seed, False)
     cross = [(i, j) for i, j in pairs if split[i] != split[j]]
-    leaked_val = {j if split[j] == 1 else i for i, j in cross}
-    return cross, leaked_val, len(va)
+    leaked = {j if split[j] == 1 else i for i, j in cross}
+    return cross, leaked, n_holdout
 
 
-def residual_leakage_sweep(a, p, ac, pc, labels, groups, val_ratio, seed=0,
+def residual_leakage_sweep(a, p, ac, pc, labels, groups, val_ratio, test_ratio, seed=0,
                            thresholds=(5, 8, 10, 12, 16), chunk=512):
     """Residual leakage of the GROUP-AWARE split as the match threshold loosens.
 
@@ -187,10 +194,7 @@ def residual_leakage_sweep(a, p, ac, pc, labels, groups, val_ratio, seed=0,
     images have a train twin that the strict threshold missed? Rising
     cross-class counts mark where the threshold stops meaning "duplicate".
     """
-    tr, va = split_indices(list(labels), list(groups), val_ratio, seed,
-                           min_val_per_class=1, group_aware=True)
-    split = np.zeros(len(labels), dtype=np.int8)
-    split[va] = 1
+    split, n_holdout = _holdout_mask(labels, groups, val_ratio, test_ratio, seed, True)
     n = a.shape[1]
     rows = []
     for thresh in thresholds:
@@ -213,9 +217,9 @@ def residual_leakage_sweep(a, p, ac, pc, labels, groups, val_ratio, seed=0,
                     cross_class += int(labels[gi] != labels[gj])
         rows.append({"thresh": thresh, "cross_split_pairs": cross_pairs,
                      "leaked_val_images": len(leaked),
-                     "leak_rate_pct": 100 * len(leaked) / max(len(va), 1),
+                     "leak_rate_pct": 100 * len(leaked) / max(n_holdout, 1),
                      "cross_class_pairs": cross_class})
-    return rows, len(va)
+    return rows, n_holdout
 
 
 def montage(files, pairs, out_png, k=12):
@@ -243,7 +247,8 @@ def main():
     ap.add_argument("root")
     ap.add_argument("--out", default=None)
     ap.add_argument("--thresh", type=int, default=5)
-    ap.add_argument("--val-ratio", type=float, default=0.25)
+    ap.add_argument("--val-ratio", type=float, default=0.2)
+    ap.add_argument("--test-ratio", type=float, default=0.2)
     args = ap.parse_args()
 
     root = Path(args.root)
@@ -269,11 +274,12 @@ def main():
     dup_members = int(sum(s for s in sizes if s > 1))
     cross_class = [(i, j) for i, j in pairs if labels[i] != labels[j]]
 
-    cross, leaked_val, n_val = naive_split_leakage(labels, roots, pairs, args.val_ratio)
+    cross, leaked_val, n_val = naive_split_leakage(labels, roots, pairs,
+                                                   args.val_ratio, args.test_ratio)
     leak_rate = 100 * len(leaked_val) / max(n_val, 1)
     print("sweeping residual leakage of the group-aware split ...")
     residual, n_val_ga = residual_leakage_sweep(a, p, ac, pc, labels, roots,
-                                                args.val_ratio)
+                                                args.val_ratio, args.test_ratio)
 
     bg_members = len({i for pr in bg_pairs for i in pr})
     bg_cross_class = [(i, j) for i, j in bg_pairs if labels[i] != labels[j]]
@@ -305,22 +311,23 @@ def main():
         f"is at least partly composited rather than natively cropped",
         "",
         "## Leakage under a naive (non group-aware) stratified split",
-        f"- val size: {n_val} (ratio {args.val_ratio})",
-        f"- cross-split duplicate pairs: **{len(cross)}**",
-        f"- val images having a twin in train: **{len(leaked_val)}**",
-        f"- **leakage rate: {leak_rate:.2f}% of val**",
+        f"- held-out size (val + test): {n_val} (ratios val {args.val_ratio}, "
+        f"test {args.test_ratio})",
+        f"- train/held-out duplicate pairs: **{len(cross)}**",
+        f"- held-out images having a twin in train: **{len(leaked_val)}**",
+        f"- **leakage rate: {leak_rate:.2f}% of held-out**",
         "",
         f"verdict: {'**LEAKAGE > 5% -- val accuracy is inflated, flag in REPORT.md**' if leak_rate > 5 else 'leakage below the 5% threshold'}",
         "",
         "## Residual leakage of the GROUP-AWARE split (threshold sweep)",
         "",
-        f"Split as actually trained on: val size {n_val_ga}. Grouping is built at "
+        f"Split as actually trained on: held-out (val + test) size {n_val_ga}. Grouping is built at "
         f"Hamming <= {args.thresh}, so 0% at that threshold is true by construction. "
         "Loosening the threshold asks whether near-duplicates slipped through. "
         "Once `cross-class` climbs, the threshold has stopped meaning "
         "\"duplicate\" and the row is an upper bound, not a measurement.",
         "",
-        "| Hamming <= | cross-split pairs | val images with a train twin | % of val | of which cross-class |",
+        "| Hamming <= | train/held-out pairs | held-out images with a train twin | % of held-out | of which cross-class |",
         "|---:|---:|---:|---:|---:|",
     ] + [
         f"| {r['thresh']} | {r['cross_split_pairs']} | {r['leaked_val_images']} | "
@@ -335,6 +342,7 @@ def main():
     (out / "dedup_report.md").write_text("\n".join(lines), encoding="utf-8")
     (out / "dup_groups.json").write_text(json.dumps({
         "root": str(root), "thresh": args.thresh, "variants": VARIANTS,
+        "split_ratios": {"val": args.val_ratio, "test": args.test_ratio},
         "files": [str(f.relative_to(root)) for f in files],
         "group_id": [int(r) for r in roots],
         "n_pairs": len(pairs), "n_unique": len(uniq),

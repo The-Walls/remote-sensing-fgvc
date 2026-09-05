@@ -1,0 +1,12 @@
+_base_: L1_448.yaml
+
+# Control for L2. rs_rot changes two things at once: the orientation
+# augmentation (dihedral group + free rotation) AND a 1.366x resize-then-
+# centre-crop that exists only to hide rotation's black corners -- which also
+# zooms the training view relative to eval. rs_zoom keeps the crop and drops
+# the orientation part, so L2z - L1_448 is the zoom/crop effect and
+# L2 - L2z is the orientation augmentation alone.
+exp_name: L2z_zoom_only
+
+data:
+  aug: rs_zoom
