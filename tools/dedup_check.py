@@ -22,6 +22,7 @@ Usage:
 """
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -29,6 +30,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.data import split_indices   # noqa: E402
 
 EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"}
 VARIANTS = ["id", "rot90", "rot180", "rot270", "hflip", "vflip"]
@@ -157,17 +161,61 @@ def union_groups(n, pairs):
 
 
 def naive_split_leakage(labels, groups, pairs, val_ratio, seed=0):
-    """Cross-split duplicate pairs a plain stratified split would produce."""
-    rng = np.random.default_rng(seed)
+    """Cross-split duplicate pairs the naive split produces.
+
+    Uses src.data.split_indices with group_aware=False -- i.e. the exact split
+    the L0_naive_split run trains on. Rolling a separate RNG split here would
+    report leakage for a split no experiment ever used.
+    """
+    tr, va = split_indices(list(labels), list(groups), val_ratio, seed,
+                           min_val_per_class=1, group_aware=False)
     split = np.zeros(len(labels), dtype=np.int8)      # 0 train, 1 val
-    for c in np.unique(labels):
-        idx = np.nonzero(labels == c)[0]
-        rng.shuffle(idx)
-        split[idx[: max(1, int(round(len(idx) * val_ratio)))]] = 1
+    split[va] = 1
     cross = [(i, j) for i, j in pairs if split[i] != split[j]]
     leaked_val = {j if split[j] == 1 else i for i, j in cross}
-    n_val = int(split.sum())
-    return cross, leaked_val, n_val
+    return cross, leaked_val, len(va)
+
+
+def residual_leakage_sweep(a, p, ac, pc, labels, groups, val_ratio, seed=0,
+                           thresholds=(5, 8, 10, 12, 16), chunk=512):
+    """Residual leakage of the GROUP-AWARE split as the match threshold loosens.
+
+    Showing that a naive split leaks is only half the argument; the reported
+    numbers rest on the claim that the group-aware split does NOT. Grouping is
+    built at thresh=5, so 0% there is true by construction and proves nothing.
+    Re-measuring at looser thresholds asks the real question: how many val
+    images have a train twin that the strict threshold missed? Rising
+    cross-class counts mark where the threshold stops meaning "duplicate".
+    """
+    tr, va = split_indices(list(labels), list(groups), val_ratio, seed,
+                           min_val_per_class=1, group_aware=True)
+    split = np.zeros(len(labels), dtype=np.int8)
+    split[va] = 1
+    n = a.shape[1]
+    rows = []
+    for thresh in thresholds:
+        leaked, cross_pairs, cross_class = set(), 0, 0
+        for s in range(0, n, chunk):
+            e = min(s + chunk, n)
+            hit = np.zeros((e - s, n), dtype=bool)
+            for v in range(len(VARIANTS)):
+                hit |= ((np.bitwise_count(a[v, s:e, None] ^ a[0][None, :]) <= thresh)
+                        & (np.bitwise_count(p[v, s:e, None] ^ p[0][None, :]) <= thresh)
+                        & (np.bitwise_count(ac[v, s:e, None] ^ ac[0][None, :]) <= thresh)
+                        & (np.bitwise_count(pc[v, s:e, None] ^ pc[0][None, :]) <= thresh))
+            for li, gi in enumerate(range(s, e)):
+                for gj in np.nonzero(hit[li])[0]:
+                    gj = int(gj)
+                    if gj <= gi or split[gi] == split[gj]:
+                        continue
+                    cross_pairs += 1
+                    leaked.add(gj if split[gj] == 1 else gi)
+                    cross_class += int(labels[gi] != labels[gj])
+        rows.append({"thresh": thresh, "cross_split_pairs": cross_pairs,
+                     "leaked_val_images": len(leaked),
+                     "leak_rate_pct": 100 * len(leaked) / max(len(va), 1),
+                     "cross_class_pairs": cross_class})
+    return rows, len(va)
 
 
 def montage(files, pairs, out_png, k=12):
@@ -223,6 +271,9 @@ def main():
 
     cross, leaked_val, n_val = naive_split_leakage(labels, roots, pairs, args.val_ratio)
     leak_rate = 100 * len(leaked_val) / max(n_val, 1)
+    print("sweeping residual leakage of the group-aware split ...")
+    residual, n_val_ga = residual_leakage_sweep(a, p, ac, pc, labels, roots,
+                                                args.val_ratio)
 
     bg_members = len({i for pr in bg_pairs for i in pr})
     bg_cross_class = [(i, j) for i, j in bg_pairs if labels[i] != labels[j]]
@@ -260,6 +311,20 @@ def main():
         f"- **leakage rate: {leak_rate:.2f}% of val**",
         "",
         f"verdict: {'**LEAKAGE > 5% -- val accuracy is inflated, flag in REPORT.md**' if leak_rate > 5 else 'leakage below the 5% threshold'}",
+        "",
+        "## Residual leakage of the GROUP-AWARE split (threshold sweep)",
+        "",
+        f"Split as actually trained on: val size {n_val_ga}. Grouping is built at "
+        f"Hamming <= {args.thresh}, so 0% at that threshold is true by construction. "
+        "Loosening the threshold asks whether near-duplicates slipped through. "
+        "Once `cross-class` climbs, the threshold has stopped meaning "
+        "\"duplicate\" and the row is an upper bound, not a measurement.",
+        "",
+        "| Hamming <= | cross-split pairs | val images with a train twin | % of val | of which cross-class |",
+        "|---:|---:|---:|---:|---:|",
+    ] + [
+        f"| {r['thresh']} | {r['cross_split_pairs']} | {r['leaked_val_images']} | "
+        f"{r['leak_rate_pct']:.2f}% | {r['cross_class_pairs']} |" for r in residual
     ]
     if cross_class:
         lines += ["", "## Cross-class duplicate pairs (label-quality issue)", ""]
@@ -274,6 +339,7 @@ def main():
         "group_id": [int(r) for r in roots],
         "n_pairs": len(pairs), "n_unique": len(uniq),
         "leak_rate_naive_split": leak_rate,
+        "residual_leakage_group_aware_split": residual,
         "n_shared_background_pairs": len(bg_pairs),
         "n_shared_background_cross_class": len(bg_cross_class),
         "cross_class_pairs": [[str(files[i].relative_to(root)),

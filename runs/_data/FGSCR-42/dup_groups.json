@@ -15572,6 +15572,43 @@
   "n_pairs": 4838,
   "n_unique": 5233,
   "leak_rate_naive_split": 44.776119402985074,
+  "residual_leakage_group_aware_split": [
+    {
+      "thresh": 5,
+      "cross_split_pairs": 0,
+      "leaked_val_images": 0,
+      "leak_rate_pct": 0.0,
+      "cross_class_pairs": 0
+    },
+    {
+      "thresh": 8,
+      "cross_split_pairs": 93,
+      "leaked_val_images": 51,
+      "leak_rate_pct": 2.7127659574468086,
+      "cross_class_pairs": 2
+    },
+    {
+      "thresh": 10,
+      "cross_split_pairs": 150,
+      "leaked_val_images": 79,
+      "leak_rate_pct": 4.202127659574468,
+      "cross_class_pairs": 6
+    },
+    {
+      "thresh": 12,
+      "cross_split_pairs": 288,
+      "leaked_val_images": 148,
+      "leak_rate_pct": 7.872340425531915,
+      "cross_class_pairs": 32
+    },
+    {
+      "thresh": 16,
+      "cross_split_pairs": 1673,
+      "leaked_val_images": 592,
+      "leak_rate_pct": 31.48936170212766,
+      "cross_class_pairs": 721
+    }
+  ],
   "n_shared_background_pairs": 375,
   "n_shared_background_cross_class": 10,
   "cross_class_pairs": [

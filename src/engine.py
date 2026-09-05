@@ -58,25 +58,3 @@ def evaluate(model, loader, crit, dev, cfg, n_classes, keep_preds=False):
     out = metrics.summarize(cm)
     out["val_loss"] = tot / max(n, 1)
     return out, cm, (y_true, y_pred) if keep_preds else None
-
-
-def run_with_oom_backoff(fn, cfg, log, min_bs=2):
-    """Call fn(batch_size); on CUDA OOM halve the batch size and retry.
-
-    Reported explicitly because it silently changes the effective recipe -- an
-    L-rung that OOM'd is no longer comparing like with like.
-    """
-    bs = cfg["data"]["batch_size"]
-    events = []
-    while True:
-        try:
-            return fn(bs), bs, events
-        except torch.cuda.OutOfMemoryError:
-            torch.cuda.empty_cache()
-            if bs <= min_bs:
-                raise
-            new = max(min_bs, bs // 2)
-            msg = f"[OOM] batch_size {bs} -> {new}"
-            log(msg)
-            events.append(msg)
-            bs = new

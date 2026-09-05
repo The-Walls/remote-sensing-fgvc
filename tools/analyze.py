@@ -48,15 +48,34 @@ def collect(runs: Path):
     return out
 
 
-def agg(rs, key):
-    v = np.array([r[key] for r in rs], dtype=float)
-    return v.mean(), (v.std(ddof=1) if len(v) > 1 else 0.0), len(v)
+FINAL_K = 10   # epochs averaged to characterise the converged model
 
 
-def fmt(mean, std, n, scale=100):
-    if n > 1:
-        return f"{mean * scale:.2f} ± {std * scale:.2f}"
-    return f"{mean * scale:.2f}"
+def final_window(r, key, k=FINAL_K):
+    """Mean/std of `key` over the last k epochs of one run."""
+    v = np.array([h[key] for h in r["history"][-k:]], dtype=float)
+    return v.mean(), v.std()
+
+
+def agg_final(rs, key):
+    """Converged value across seeds.
+
+    Reporting max-over-epochs on the same split used to pick the epoch turns a
+    comparison of models into a comparison of how noisy each run happened to be
+    (see REPORT section 4). The converged mean has no such selection step.
+
+    With >1 seed the spread is between seeds; with a single seed it is the
+    epoch-to-epoch jitter of that run's final window -- a floor on the noise,
+    not a substitute for seed variance.
+    """
+    means = np.array([final_window(r, key)[0] for r in rs], dtype=float)
+    if len(rs) > 1:
+        return means.mean(), means.std(ddof=1), len(rs)
+    return means[0], final_window(rs[0], key)[1], 1
+
+
+def fmt(mean, std, scale=100):
+    return f"{mean * scale:.2f} ± {std * scale:.2f}"
 
 
 def confusion_png(cm, classes, title, path):
@@ -137,12 +156,21 @@ def main():
         raise SystemExit(f"no metrics.json under {runs}")
     names = sorted(by_exp, key=order_key)
     base = by_exp.get(args.baseline)
-    base_top1 = agg(base, "overall_top1")[0] if base else None
-    base_mpc = agg(base, "mean_per_class_top1")[0] if base else None
+    base_top1 = agg_final(base, "overall_top1")[0] if base else None
+    base_mpc = agg_final(base, "mean_per_class_top1")[0] if base else None
+    multi_seed = any(len(by_exp[n]) > 1 for n in names)
 
     lines = ["# Experiment ladder", "",
+             f"Numbers are **converged values**: mean over the last {FINAL_K} "
+             f"epochs. They are NOT the best epoch -- selecting the epoch and "
+             f"reporting the score on the same val split rewards whichever run "
+             f"happened to spike, and on this ladder that reverses three "
+             f"conclusions (see the selection-gap table below).", "",
              f"baseline = `{args.baseline}`; Δ columns are absolute percentage "
-             f"points against it. `± ` appears once a rung has >1 seed.", "",
+             f"points against it. `±` is "
+             + ("between seeds where a rung has >1, else "
+                if multi_seed else "")
+             + f"epoch-to-epoch jitter across the final {FINAL_K} epochs.", "",
              "| id | backbone | img | aug | head | loss | seeds | overall top-1 | Δ | "
              "mean-per-class | Δ | MPC (support≥5) | macro-F1 | params (M) | "
              "s/epoch | Δ vs parent |",
@@ -152,10 +180,10 @@ def main():
     for name in names:
         rs = by_exp[name]
         h = rs[0]["hparams"]
-        t_m, t_s, n = agg(rs, "overall_top1")
-        m_m, m_s, _ = agg(rs, "mean_per_class_top1")
-        m5_m, m5_s, _ = agg(rs, "mean_per_class_top1_support_ge5")
-        f_m, f_s, _ = agg(rs, "macro_f1")
+        t_m, t_s, n = agg_final(rs, "overall_top1")
+        m_m, m_s, _ = agg_final(rs, "mean_per_class_top1")
+        m5_m, m5_s, _ = agg_final(rs, "mean_per_class_top1_support_ge5")
+        f_m, f_s, _ = agg_final(rs, "macro_f1")
         d_t = f"{(t_m - base_top1) * 100:+.2f}" if base_top1 is not None else "-"
         d_m = f"{(m_m - base_mpc) * 100:+.2f}" if base_mpc is not None else "-"
 
@@ -170,10 +198,28 @@ def main():
         lines.append(
             f"| {name} | {h['model']['name']} | {img}{up} | {h['data']['aug']} | "
             f"{h['model']['head']} | {h['loss']['name']} | {n} | "
-            f"{fmt(t_m, t_s, n)} | {d_t} | {fmt(m_m, m_s, n)} | {d_m} | "
-            f"{fmt(m5_m, m5_s, n)} | {fmt(f_m, f_s, n)} | "
+            f"{fmt(t_m, t_s)} | {d_t} | {fmt(m_m, m_s)} | {d_m} | "
+            f"{fmt(m5_m, m5_s)} | {fmt(f_m, f_s)} | "
             f"{rs[0]['params_M']:.2f} | "
             f"{np.mean([r['sec_per_epoch'] for r in rs]):.1f} | {diff_s} |")
+
+    lines += ["", f"## Selection gap: val-selected best epoch vs converged", "",
+              "`best` is the epoch with the highest val mean-per-class, scored on "
+              "that same val split -- the number the runs were originally reported "
+              "with. `gap` is how much of it is the maximum of a noisy sequence "
+              "rather than model quality. A rung whose val curve jitters more wins "
+              "a comparison of maxima without being better.", "",
+              "| id | best-ep | MPC @best | MPC converged | gap | top-1 @best | "
+              "top-1 converged | gap |",
+              "|---|---:|---:|---:|---:|---:|---:|---:|"]
+    for name in names:
+        r = by_exp[name][0]
+        m_b = r["mean_per_class_top1"] * 100
+        m_c = final_window(r, "mean_per_class_top1")[0] * 100
+        t_b = r["overall_top1"] * 100
+        t_c = final_window(r, "overall_top1")[0] * 100
+        lines.append(f"| {name} | {r['best_epoch']} | {m_b:.2f} | {m_c:.2f} | "
+                     f"{m_b - m_c:+.2f} | {t_b:.2f} | {t_c:.2f} | {t_b - t_c:+.2f} |")
 
     ooms = [(n, r["oom_events"]) for n in names for r in by_exp[n] if r["oom_events"]]
     if ooms:

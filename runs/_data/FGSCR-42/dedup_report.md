@@ -25,6 +25,18 @@ A full-frame match with a **non**-matching centre crop means the two images shar
 
 verdict: **LEAKAGE > 5% -- val accuracy is inflated, flag in REPORT.md**
 
+## Residual leakage of the GROUP-AWARE split (threshold sweep)
+
+Split as actually trained on: val size 1880. Grouping is built at Hamming <= 5, so 0% at that threshold is true by construction. Loosening the threshold asks whether near-duplicates slipped through. Once `cross-class` climbs, the threshold has stopped meaning "duplicate" and the row is an upper bound, not a measurement.
+
+| Hamming <= | cross-split pairs | val images with a train twin | % of val | of which cross-class |
+|---:|---:|---:|---:|---:|
+| 5 | 0 | 0 | 0.00% | 0 |
+| 8 | 93 | 51 | 2.71% | 2 |
+| 10 | 150 | 79 | 4.20% | 6 |
+| 12 | 288 | 148 | 7.87% | 32 |
+| 16 | 1673 | 592 | 31.49% | 721 |
+
 ## Cross-class duplicate pairs (label-quality issue)
 
 - `011.Asagiri-class_destroyer/P5985.bmp`  ==  `027.Murasame-class_destroyer/P9862.bmp`
