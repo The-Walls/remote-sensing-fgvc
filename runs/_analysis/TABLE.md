@@ -12,6 +12,7 @@ baseline = `L0`; Δ columns are absolute percentage points against it.
 | L1_448 | resnet50 | 448 | basic | gap | ce | 3 | 98.41 ± 0.51 | +0.87 | 89.79 ± 2.17 | +2.37 | 96.76 ± 1.09 | 89.26 ± 3.23 | 23.59 | 12.1 | `data.img_size`: 224→448 |
 | L2 | resnet50 | 448 | rs_rot | gap | ce | 3 | 98.34 ± 0.43 | +0.80 | 90.62 ± 2.31 | +3.20 | 97.11 ± 1.38 | 90.22 ± 2.90 | 23.59 | 13.3 | `data.aug`: basic→rs_rot |
 | L2z_zoom_only | resnet50 | 448 | rs_zoom | gap | ce | 3 | 96.93 ± 0.61 | -0.61 | 87.59 ± 2.73 | +0.16 | 95.04 ± 1.63 | 87.06 ± 2.71 | 23.59 | 12.5 | `data.aug`: basic→rs_zoom |
+| L2r_rot_reflect | resnet50 | 448 | rs_rot_reflect | gap | ce | 3 | 99.29 ± 0.56 | +1.75 | 93.15 ± 0.76 | +5.72 | 99.28 ± 0.39 | 92.57 ± 0.79 | 23.59 | 14.3 | `data.aug`: basic→rs_rot_reflect |
 | L3_compact_bilinear | resnet50 | 448 | rs_rot | compact_bilinear | ce | 3 | 96.21 ± 0.41 | -1.33 | 87.87 ± 2.47 | +0.44 | 93.15 ± 0.13 | 85.94 ± 1.52 | 23.85 | 14.2 | `model.head`: gap→compact_bilinear |
 | L4_cbam | resnet50 | 448 | rs_rot | cbam | ce | 3 | 97.78 ± 0.99 | +0.24 | 90.08 ± 2.36 | +2.65 | 96.31 ± 1.07 | 88.98 ± 3.47 | 24.12 | 13.2 | `model.head`: gap→cbam |
 | L5_cb_ce | resnet50 | 448 | rs_rot | gap | cb_ce | 3 | 98.10 ± 0.69 | +0.56 | 91.81 ± 1.16 | +4.39 | 97.62 ± 1.46 | 91.07 ± 1.98 | 23.59 | 13.3 | `loss.name`: ce→cb_ce |
@@ -38,6 +39,7 @@ val@best is the maximum of a noisy sequence and is therefore optimistic; the gap
 | L1_448 | 17/25/16 | 92.21 | 89.79 | +2.42 | 98.67 | 98.41 | +0.27 |
 | L2 | 39/54/37 | 90.18 | 90.62 | -0.44 | 97.92 | 98.34 | -0.42 |
 | L2z_zoom_only | 28/25/42 | 89.30 | 87.59 | +1.71 | 96.77 | 96.93 | -0.16 |
+| L2r_rot_reflect | 14/34/9 | 93.45 | 93.15 | +0.30 | 99.19 | 99.29 | -0.10 |
 | L3_compact_bilinear | 45/50/36 | 87.29 | 87.87 | -0.58 | 95.91 | 96.21 | -0.30 |
 | L4_cbam | 41/37/11 | 91.23 | 90.08 | +1.15 | 97.11 | 97.78 | -0.67 |
 | L5_cb_ce | 57/45/42 | 92.69 | 91.81 | +0.88 | 97.57 | 98.10 | -0.52 |
@@ -56,6 +58,7 @@ If test@best and the converged test value disagree by more than the seed spread,
 | L1_448 | 89.79 | 89.27 | +0.52 | 98.41 | 98.59 | -0.18 |
 | L2 | 90.62 | 90.39 | +0.24 | 98.34 | 98.23 | +0.11 |
 | L2z_zoom_only | 87.59 | 86.44 | +1.15 | 96.93 | 96.95 | -0.02 |
+| L2r_rot_reflect | 93.15 | 92.54 | +0.61 | 99.29 | 99.34 | -0.05 |
 | L3_compact_bilinear | 87.87 | 88.25 | -0.38 | 96.21 | 96.26 | -0.06 |
 | L4_cbam | 90.08 | 90.61 | -0.53 | 97.78 | 98.23 | -0.45 |
 | L5_cb_ce | 91.81 | 92.35 | -0.54 | 98.10 | 98.12 | -0.02 |
@@ -84,6 +87,9 @@ If test@best and the converged test value disagree by more than the seed spread,
 | L2z_zoom_only | 0 | 28 | 96.90 | 89.23 | 96.34 | 87.44 | 88.09 | bc73f71 |
 | L2z_zoom_only | 1 | 25 | 97.55 | 89.10 | 95.58 | 89.56 | 89.04 | bc73f71 |
 | L2z_zoom_only | 2 | 42 | 96.34 | 84.43 | 93.21 | 84.19 | 90.77 | bc73f71 |
+| L2r_rot_reflect | 0 | 14 | 99.60 | 92.32 | 99.19 | 91.76 | 92.07 | e7dc49b |
+| L2r_rot_reflect | 1 | 34 | 99.62 | 93.83 | 99.69 | 93.35 | 95.12 | e7dc49b |
+| L2r_rot_reflect | 2 | 9 | 98.65 | 93.29 | 98.94 | 92.60 | 93.15 | e7dc49b |
 | L3_compact_bilinear | 0 | 45 | 95.95 | 90.68 | 93.17 | 87.70 | 87.50 | bc73f71 |
 | L3_compact_bilinear | 1 | 50 | 95.98 | 86.08 | 93.01 | 85.18 | 86.70 | bc73f71 |
 | L3_compact_bilinear | 2 | 36 | 96.68 | 86.85 | 93.26 | 84.95 | 87.66 | bc73f71 |
@@ -232,6 +238,19 @@ If test@best and the converged test value disagree by more than the seed spread,
 | 026.Cargo_ship | 030.Civil_yacht | 1 | 65 |
 
 ![errors](errors_L2z_zoom_only.png)
+
+### L2r_rot_reflect
+
+| true | predicted | n | true support |
+|---|---|---:|---:|
+| 035.Zumwalt-class_destroyer | 014.Wasp-class_assault_ship | 1 | 2 |
+| 037.Horizon-class_destroyer | 026.Cargo_ship | 1 | 1 |
+| 039.Mistral-class_amphibious_assault_ship | 006.INS_Virrat_aircraft_carrier | 1 | 1 |
+| 022.Sacramento-class_support_ship | 009.Arleigh_Burke-class_destroyer | 1 | 6 |
+| 035.Zumwalt-class_destroyer | 021.Independence-class_combat_ship | 1 | 2 |
+| 011.Asagiri-class_destroyer | 038.Atago-class_destroyer | 1 | 17 |
+
+![errors](errors_L2r_rot_reflect.png)
 
 ### L3_compact_bilinear
 
