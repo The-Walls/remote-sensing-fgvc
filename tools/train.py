@@ -152,6 +152,10 @@ def main():
             train_loader, val_loader = rebuild_loaders(new)
             sched_state["warmup"] = cfg["train"]["warmup_epochs"] * len(train_loader)
             sched_state["total"] = cfg["train"]["epochs"] * len(train_loader)
+            # The epoch restarts, so rewind `step` to its start in the new
+            # (longer) iteration space; otherwise the cosine schedule jumps
+            # because `step` still counts batches of the old size.
+            sched_state["step"] = ep * len(train_loader)
             continue
         row = {"epoch": ep, **tr, **{k: v for k, v in ev.items()
                                      if not k.startswith("per_class")}}
