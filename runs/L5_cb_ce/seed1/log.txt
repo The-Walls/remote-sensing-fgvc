@@ -1,0 +1,66 @@
+=== L5_cb_ce seed=1 ===
+config: configs\fgscr42\L5.yaml  commit: bc73f71
+classes=42 train=4634 val=1550 test=1594 groups=5233 train_imbalance=463.0x | classes absent from val/test: 1/0
+model=resnet50 head=gap params=23.59M img_size=448
+ep   0 | loss 3.7004 | val loss 3.6381 mpc 8.99 | test top1 15.68 mpc 6.05 f1 5.19 | 21.2s
+ep   1 | loss 3.5479 | val loss 3.4477 mpc 20.65 | test top1 36.26 mpc 20.01 f1 15.74 | 12.5s
+ep   2 | loss 3.1725 | val loss 2.9767 mpc 34.45 | test top1 47.80 mpc 33.00 f1 25.95 | 12.5s
+ep   3 | loss 2.3841 | val loss 2.2343 mpc 49.68 | test top1 63.61 mpc 52.37 f1 45.72 | 12.4s
+ep   4 | loss 1.6195 | val loss 1.8598 mpc 64.06 | test top1 77.92 mpc 65.78 f1 64.50 | 12.4s
+ep   5 | loss 1.1829 | val loss 1.4041 mpc 76.58 | test top1 87.26 mpc 80.89 f1 78.69 | 12.5s
+ep   6 | loss 0.9714 | val loss 1.2936 mpc 84.71 | test top1 88.90 mpc 83.32 f1 79.88 | 12.5s
+ep   7 | loss 0.8742 | val loss 1.2148 mpc 84.36 | test top1 91.47 mpc 85.56 f1 82.95 | 12.4s
+ep   8 | loss 0.8278 | val loss 1.1752 mpc 84.28 | test top1 93.04 mpc 87.31 f1 83.21 | 12.5s
+ep   9 | loss 0.7913 | val loss 1.0560 mpc 90.15 | test top1 95.36 mpc 89.82 f1 87.23 | 12.5s
+ep  10 | loss 0.7779 | val loss 1.0690 mpc 90.24 | test top1 94.98 mpc 89.74 f1 88.94 | 12.6s
+ep  11 | loss 0.7681 | val loss 1.0393 mpc 91.01 | test top1 95.55 mpc 91.39 f1 89.14 | 12.3s
+ep  12 | loss 0.7525 | val loss 1.0020 mpc 92.15 | test top1 96.80 mpc 92.49 f1 90.55 | 12.5s
+ep  13 | loss 0.7504 | val loss 0.9716 mpc 92.72 | test top1 96.30 mpc 90.00 f1 87.63 | 12.6s
+ep  14 | loss 0.7372 | val loss 1.0094 mpc 91.96 | test top1 96.30 mpc 89.92 f1 88.02 | 12.5s
+ep  15 | loss 0.7357 | val loss 0.9598 mpc 93.32 | test top1 97.43 mpc 92.71 f1 92.35 | 12.4s
+ep  16 | loss 0.7321 | val loss 0.9656 mpc 92.84 | test top1 97.05 mpc 91.42 f1 90.41 | 12.5s
+ep  17 | loss 0.7258 | val loss 0.9780 mpc 93.35 | test top1 97.05 mpc 92.08 f1 90.78 | 12.5s
+ep  18 | loss 0.7251 | val loss 0.9677 mpc 93.91 | test top1 97.93 mpc 91.28 f1 90.41 | 12.5s
+ep  19 | loss 0.7226 | val loss 0.9467 mpc 93.33 | test top1 97.62 mpc 91.82 f1 91.80 | 12.4s
+ep  20 | loss 0.7231 | val loss 0.9582 mpc 92.26 | test top1 97.37 mpc 91.10 f1 88.83 | 12.5s
+ep  21 | loss 0.7225 | val loss 0.9323 mpc 93.95 | test top1 97.62 mpc 91.84 f1 91.58 | 12.6s
+ep  22 | loss 0.7178 | val loss 0.9427 mpc 91.56 | test top1 97.55 mpc 92.17 f1 91.83 | 12.5s
+ep  23 | loss 0.7201 | val loss 0.9590 mpc 93.13 | test top1 96.93 mpc 90.68 f1 89.57 | 12.4s
+ep  24 | loss 0.7121 | val loss 0.9369 mpc 93.83 | test top1 98.31 mpc 92.79 f1 91.36 | 12.4s
+ep  25 | loss 0.7138 | val loss 0.9334 mpc 93.75 | test top1 97.05 mpc 91.91 f1 90.88 | 12.5s
+ep  26 | loss 0.7110 | val loss 0.9165 mpc 93.96 | test top1 98.18 mpc 91.85 f1 90.81 | 12.6s
+ep  27 | loss 0.7118 | val loss 0.9359 mpc 93.66 | test top1 98.31 mpc 91.96 f1 91.67 | 12.4s
+ep  28 | loss 0.7086 | val loss 0.9124 mpc 94.06 | test top1 98.31 mpc 92.50 f1 92.44 | 12.4s
+ep  29 | loss 0.7063 | val loss 0.9231 mpc 93.84 | test top1 98.31 mpc 93.43 f1 92.99 | 12.6s
+ep  30 | loss 0.7114 | val loss 0.9367 mpc 92.73 | test top1 98.49 mpc 92.50 f1 91.58 | 12.5s
+ep  31 | loss 0.7084 | val loss 0.9340 mpc 93.76 | test top1 97.93 mpc 91.78 f1 90.20 | 12.5s
+ep  32 | loss 0.7054 | val loss 0.9097 mpc 93.99 | test top1 98.43 mpc 91.94 f1 90.83 | 12.5s
+ep  33 | loss 0.7050 | val loss 0.9205 mpc 93.76 | test top1 98.43 mpc 91.48 f1 90.98 | 12.4s
+ep  34 | loss 0.7061 | val loss 0.9234 mpc 93.83 | test top1 98.43 mpc 92.09 f1 92.22 | 12.4s
+ep  35 | loss 0.7034 | val loss 0.9158 mpc 93.69 | test top1 98.31 mpc 91.96 f1 91.07 | 12.6s
+ep  36 | loss 0.7047 | val loss 0.9076 mpc 94.20 | test top1 98.24 mpc 91.47 f1 90.31 | 12.4s
+ep  37 | loss 0.7010 | val loss 0.9142 mpc 94.14 | test top1 98.68 mpc 92.59 f1 92.82 | 12.4s
+ep  38 | loss 0.7032 | val loss 0.9074 mpc 94.28 | test top1 98.31 mpc 91.88 f1 90.75 | 12.5s
+ep  39 | loss 0.7031 | val loss 0.9122 mpc 94.04 | test top1 98.43 mpc 92.53 f1 91.87 | 12.4s
+ep  40 | loss 0.7010 | val loss 0.9267 mpc 94.17 | test top1 98.43 mpc 92.49 f1 92.63 | 12.4s
+ep  41 | loss 0.7010 | val loss 0.9002 mpc 94.34 | test top1 98.93 mpc 93.63 f1 92.94 | 12.4s
+ep  42 | loss 0.7005 | val loss 0.9191 mpc 94.19 | test top1 98.43 mpc 92.05 f1 92.22 | 12.5s
+ep  43 | loss 0.6997 | val loss 0.9069 mpc 94.33 | test top1 98.56 mpc 92.57 f1 92.03 | 12.5s
+ep  44 | loss 0.7000 | val loss 0.9201 mpc 93.97 | test top1 98.49 mpc 92.53 f1 92.05 | 12.4s
+ep  45 | loss 0.6986 | val loss 0.9078 mpc 94.37 | test top1 98.75 mpc 93.12 f1 93.32 | 12.5s
+ep  46 | loss 0.6987 | val loss 0.9089 mpc 94.21 | test top1 98.62 mpc 92.57 f1 92.84 | 12.4s
+ep  47 | loss 0.7000 | val loss 0.9076 mpc 94.21 | test top1 98.43 mpc 92.51 f1 92.63 | 12.5s
+ep  48 | loss 0.6990 | val loss 0.9008 mpc 94.21 | test top1 98.62 mpc 93.03 f1 92.30 | 12.5s
+ep  49 | loss 0.6986 | val loss 0.9085 mpc 94.22 | test top1 98.68 mpc 93.50 f1 92.78 | 12.5s
+ep  50 | loss 0.6973 | val loss 0.9045 mpc 94.23 | test top1 98.68 mpc 93.04 f1 92.46 | 12.4s
+ep  51 | loss 0.6979 | val loss 0.9090 mpc 94.09 | test top1 98.49 mpc 92.07 f1 91.42 | 12.4s
+ep  52 | loss 0.6975 | val loss 0.9035 mpc 94.35 | test top1 98.81 mpc 92.66 f1 92.96 | 12.4s
+ep  53 | loss 0.6980 | val loss 0.9101 mpc 94.22 | test top1 98.49 mpc 92.07 f1 92.28 | 12.4s
+ep  54 | loss 0.6974 | val loss 0.9041 mpc 94.30 | test top1 98.56 mpc 93.00 f1 92.44 | 12.5s
+ep  55 | loss 0.6975 | val loss 0.9105 mpc 94.08 | test top1 98.62 mpc 92.57 f1 92.87 | 12.4s
+ep  56 | loss 0.6994 | val loss 0.9023 mpc 94.33 | test top1 98.56 mpc 92.14 f1 91.53 | 12.4s
+ep  57 | loss 0.6969 | val loss 0.9098 mpc 94.03 | test top1 98.56 mpc 92.55 f1 92.04 | 12.5s
+ep  58 | loss 0.6977 | val loss 0.9087 mpc 94.15 | test top1 98.81 mpc 93.14 f1 92.58 | 12.5s
+ep  59 | loss 0.6965 | val loss 0.9027 mpc 94.37 | test top1 98.93 mpc 93.66 f1 93.75 | 12.4s
+best val epoch 45 (val mpc 94.37) -> test top1=98.75 mpc=93.12 f1=93.32 | wall 18.6min
+-> runs\L5_cb_ce\seed1

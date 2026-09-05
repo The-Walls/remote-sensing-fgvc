@@ -1,0 +1,81 @@
+=== L1_320 seed=0 ===
+config: configs\fgscr42\L1_320.yaml  commit: bc73f71
+classes=42 train=4738 val=1558 test=1482 groups=5233 train_imbalance=472.0x | classes absent from val/test: 1/0
+model=resnet50 head=gap params=23.59M img_size=320
+ep   0 | loss 3.5313 | val loss 3.2654 mpc 5.87 | test top1 22.81 mpc 5.83 f1 3.90 | 14.8s
+ep   1 | loss 2.9855 | val loss 2.5881 mpc 13.39 | test top1 43.52 mpc 13.04 f1 11.05 | 5.9s
+ep   2 | loss 2.1871 | val loss 1.6775 mpc 40.07 | test top1 70.04 mpc 38.81 f1 37.34 | 5.9s
+ep   3 | loss 1.3896 | val loss 1.1707 mpc 67.28 | test top1 86.17 mpc 66.74 f1 66.94 | 5.9s
+ep   4 | loss 1.0204 | val loss 0.9668 mpc 81.21 | test top1 93.66 mpc 80.58 f1 80.62 | 6.0s
+ep   5 | loss 0.8599 | val loss 0.8786 mpc 81.92 | test top1 96.09 mpc 83.56 f1 82.94 | 5.9s
+ep   6 | loss 0.7910 | val loss 0.8364 mpc 84.40 | test top1 96.83 mpc 84.27 f1 83.59 | 6.0s
+ep   7 | loss 0.7555 | val loss 0.8122 mpc 87.90 | test top1 97.03 mpc 85.29 f1 83.82 | 6.0s
+ep   8 | loss 0.7371 | val loss 0.7977 mpc 88.27 | test top1 97.50 mpc 85.83 f1 84.57 | 5.9s
+ep   9 | loss 0.7271 | val loss 0.7943 mpc 88.28 | test top1 97.71 mpc 85.83 f1 85.32 | 6.0s
+ep  10 | loss 0.7205 | val loss 0.7891 mpc 89.82 | test top1 97.84 mpc 85.87 f1 84.86 | 5.9s
+ep  11 | loss 0.7163 | val loss 0.7775 mpc 88.35 | test top1 98.04 mpc 85.85 f1 85.13 | 6.0s
+ep  12 | loss 0.7140 | val loss 0.7717 mpc 89.44 | test top1 97.91 mpc 85.63 f1 85.08 | 5.9s
+ep  13 | loss 0.7100 | val loss 0.7674 mpc 89.92 | test top1 98.45 mpc 88.65 f1 87.54 | 5.9s
+ep  14 | loss 0.7068 | val loss 0.7701 mpc 89.70 | test top1 98.31 mpc 85.92 f1 85.63 | 6.0s
+ep  15 | loss 0.7064 | val loss 0.7603 mpc 90.13 | test top1 98.45 mpc 86.21 f1 85.63 | 6.0s
+ep  16 | loss 0.7037 | val loss 0.7620 mpc 90.00 | test top1 98.18 mpc 85.69 f1 85.26 | 5.9s
+ep  17 | loss 0.7029 | val loss 0.7594 mpc 89.80 | test top1 98.25 mpc 88.37 f1 87.31 | 5.9s
+ep  18 | loss 0.7022 | val loss 0.7607 mpc 90.04 | test top1 98.04 mpc 85.83 f1 85.64 | 6.0s
+ep  19 | loss 0.6993 | val loss 0.7551 mpc 89.63 | test top1 98.31 mpc 86.05 f1 85.31 | 6.0s
+ep  20 | loss 0.6997 | val loss 0.7542 mpc 89.93 | test top1 98.45 mpc 86.10 f1 85.72 | 5.9s
+ep  21 | loss 0.6993 | val loss 0.7571 mpc 89.86 | test top1 98.58 mpc 86.26 f1 85.95 | 5.9s
+ep  22 | loss 0.6971 | val loss 0.7548 mpc 90.20 | test top1 98.31 mpc 86.16 f1 85.10 | 5.9s
+ep  23 | loss 0.6963 | val loss 0.7582 mpc 89.72 | test top1 98.52 mpc 88.61 f1 87.52 | 5.9s
+ep  24 | loss 0.6957 | val loss 0.7534 mpc 90.23 | test top1 98.45 mpc 88.51 f1 88.13 | 6.0s
+ep  25 | loss 0.6957 | val loss 0.7543 mpc 90.81 | test top1 98.58 mpc 88.54 f1 86.90 | 5.9s
+ep  26 | loss 0.6950 | val loss 0.7506 mpc 90.05 | test top1 98.72 mpc 88.71 f1 87.62 | 5.9s
+ep  27 | loss 0.6941 | val loss 0.7529 mpc 89.89 | test top1 98.72 mpc 88.71 f1 87.16 | 6.0s
+ep  28 | loss 0.6947 | val loss 0.7511 mpc 89.08 | test top1 98.72 mpc 91.04 f1 89.98 | 6.0s
+ep  29 | loss 0.6935 | val loss 0.7499 mpc 90.50 | test top1 98.65 mpc 86.19 f1 85.96 | 5.9s
+ep  30 | loss 0.6927 | val loss 0.7489 mpc 90.45 | test top1 98.79 mpc 88.73 f1 88.38 | 6.0s
+ep  31 | loss 0.6924 | val loss 0.7492 mpc 90.32 | test top1 98.72 mpc 91.04 f1 89.98 | 6.0s
+ep  32 | loss 0.6923 | val loss 0.7497 mpc 90.94 | test top1 98.65 mpc 88.54 f1 88.22 | 6.0s
+ep  33 | loss 0.6917 | val loss 0.7483 mpc 90.12 | test top1 98.79 mpc 88.73 f1 88.44 | 6.0s
+ep  34 | loss 0.6920 | val loss 0.7467 mpc 90.94 | test top1 98.72 mpc 88.68 f1 88.38 | 5.9s
+ep  35 | loss 0.6908 | val loss 0.7458 mpc 90.10 | test top1 98.65 mpc 88.66 f1 88.26 | 6.0s
+ep  36 | loss 0.6914 | val loss 0.7446 mpc 90.81 | test top1 98.79 mpc 88.60 f1 88.11 | 5.9s
+ep  37 | loss 0.6900 | val loss 0.7449 mpc 91.21 | test top1 98.85 mpc 91.08 f1 90.81 | 6.0s
+=== L1_320 seed=0 ===
+config: configs\fgscr42\L1_320.yaml  commit: bc73f71
+classes=42 train=4738 val=1558 test=1482 groups=5233 train_imbalance=472.0x | classes absent from val/test: 1/0
+model=resnet50 head=gap params=23.59M img_size=320
+[resume] loaded runs\L1_320\seed0\latest.pt: next_epoch=38, batch_size=32
+ep  38 | loss 0.6903 | val loss 0.7477 mpc 91.54 | test top1 98.72 mpc 88.71 f1 88.42 | 16.7s
+ep  39 | loss 0.6904 | val loss 0.7464 mpc 91.28 | test top1 98.65 mpc 91.02 f1 90.73 | 7.4s
+ep  40 | loss 0.6901 | val loss 0.7467 mpc 90.81 | test top1 98.79 mpc 91.06 f1 90.68 | 7.6s
+ep  41 | loss 0.6897 | val loss 0.7471 mpc 90.94 | test top1 98.72 mpc 88.68 f1 88.28 | 7.5s
+ep  42 | loss 0.6892 | val loss 0.7480 mpc 90.33 | test top1 98.79 mpc 88.70 f1 88.31 | 7.5s
+ep  43 | loss 0.6897 | val loss 0.7450 mpc 90.27 | test top1 98.85 mpc 91.10 f1 89.93 | 7.5s
+ep  44 | loss 0.6890 | val loss 0.7467 mpc 89.68 | test top1 98.72 mpc 88.70 f1 88.30 | 7.1s
+ep  45 | loss 0.6892 | val loss 0.7457 mpc 90.38 | test top1 98.79 mpc 91.06 f1 90.79 | 7.6s
+ep  46 | loss 0.6889 | val loss 0.7445 mpc 90.51 | test top1 98.85 mpc 91.08 f1 90.81 | 6.7s
+ep  47 | loss 0.6888 | val loss 0.7428 mpc 91.08 | test top1 98.65 mpc 86.30 f1 86.00 | 6.7s
+ep  48 | loss 0.6886 | val loss 0.7437 mpc 90.88 | test top1 98.72 mpc 91.04 f1 90.76 | 7.2s
+ep  49 | loss 0.6884 | val loss 0.7455 mpc 90.26 | test top1 98.85 mpc 88.74 f1 88.45 | 7.2s
+ep  50 | loss 0.6887 | val loss 0.7451 mpc 90.99 | test top1 98.79 mpc 88.70 f1 88.31 | 7.4s
+=== L1_320 seed=0 ===
+config: configs\fgscr42\L1_320.yaml  commit: bc73f71
+classes=42 train=4738 val=1558 test=1482 groups=5233 train_imbalance=472.0x | classes absent from val/test: 1/0
+model=resnet50 head=gap params=23.59M img_size=320
+[resume] loaded runs\L1_320\seed0\latest.pt: next_epoch=51, batch_size=32
+ep  51 | loss 0.6885 | val loss 0.7461 mpc 91.08 | test top1 98.79 mpc 88.70 f1 88.43 | 16.8s
+ep  52 | loss 0.6886 | val loss 0.7474 mpc 90.17 | test top1 98.79 mpc 86.36 f1 85.96 | 7.5s
+ep  53 | loss 0.6885 | val loss 0.7446 mpc 90.81 | test top1 98.65 mpc 86.30 f1 86.00 | 7.6s
+ep  54 | loss 0.6883 | val loss 0.7440 mpc 90.32 | test top1 98.85 mpc 88.72 f1 88.44 | 7.5s
+ep  55 | loss 0.6884 | val loss 0.7459 mpc 90.51 | test top1 98.72 mpc 88.68 f1 88.39 | 7.6s
+ep  56 | loss 0.6882 | val loss 0.7457 mpc 90.65 | test top1 98.65 mpc 86.30 f1 85.90 | 7.5s
+ep  57 | loss 0.6885 | val loss 0.7462 mpc 90.49 | test top1 98.65 mpc 88.66 f1 88.37 | 7.6s
+ep  58 | loss 0.6882 | val loss 0.7455 mpc 90.43 | test top1 98.72 mpc 86.32 f1 85.92 | 7.6s
+=== L1_320 seed=0 ===
+config: configs\fgscr42\L1_320.yaml  commit: bc73f71
+classes=42 train=4738 val=1558 test=1482 groups=5233 train_imbalance=472.0x | classes absent from val/test: 1/0
+model=resnet50 head=gap params=23.59M img_size=320
+[resume] loaded runs\L1_320\seed0\latest.pt: next_epoch=59, batch_size=32
+ep  59 | loss 0.6885 | val loss 0.7469 mpc 89.96 | test top1 98.79 mpc 88.72 f1 88.44 | 16.7s
+best val epoch 38 (val mpc 91.54) -> test top1=98.72 mpc=88.71 f1=88.42 | wall 11.8min
+-> runs\L1_320\seed0
