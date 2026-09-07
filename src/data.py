@@ -142,7 +142,7 @@ def build(cfg, smoke=False):
         # eval loaders take half the workers so the three loaders together keep
         # the same process count as before (Windows shared-memory limit, see
         # configs/base.yaml `workers`)
-        workers = d["workers"] if train else max(1, d["workers"] // 2)
+        workers = d["workers"] if (train or d["workers"] < 2) else d["workers"] // 2
         return DataLoader(
             Subset(ds, idx), batch_size=d["batch_size"],
             shuffle=shuffle if train else False,

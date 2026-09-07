@@ -122,9 +122,12 @@ def error_grid(run_dir: Path, out_png: Path, k=12):
     if not wrong:
         return 0
 
-    cols = 4
+    cols = 4 if len(wrong) > 6 else 3
     rows = int(np.ceil(len(wrong) / cols))
-    fig, axes = plt.subplots(rows, cols, figsize=(3.1 * cols, 3.4 * rows))
+    # constrained_layout: tight_layout ignores axis('off') panels and lets the
+    # second row's titles collide with the first row's images
+    fig, axes = plt.subplots(rows, cols, figsize=(3.1 * cols, 3.6 * rows),
+                             constrained_layout=True)
     for ax in np.ravel(axes):
         ax.axis("off")
     for ax, (img, yt, yp) in zip(np.ravel(axes), wrong):
@@ -132,7 +135,6 @@ def error_grid(run_dir: Path, out_png: Path, k=12):
         ax.set_title(f"GT:  {classes[yt]}\nPred: {classes[yp]}", fontsize=7, color="#a11")
         ax.axis("off")
     fig.suptitle(f"{run_dir.parent.name}: misclassified test samples", fontsize=11)
-    fig.tight_layout()
     fig.savefig(out_png, dpi=140)
     plt.close(fig)
     return len(wrong)
